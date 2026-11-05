@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - My Study Planner</title>
-    <link rel="apple-touch-icon" href="icon-192x192.png">
     <link rel="icon" type="image/png" href="icon-192x192.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -15,12 +14,15 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: var(--bg-main); color: var(--cream); display: flex; justify-content: center; min-height: 100vh; padding: 20px; }
         .app-wrapper { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 30px; }
+        
         .navbar { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
         .nav-btn { background-color: var(--bg-card); color: var(--beige); text-decoration: none; padding: 12px 25px; border-radius: 12px; border: 1px solid var(--burgundy-dark); display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 1rem; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
         .nav-btn:hover { background-color: var(--burgundy-dark); color: var(--cream); transform: translateY(-3px); }
         .nav-btn.active { background-color: var(--burgundy-light); color: var(--cream); border-color: var(--cream); box-shadow: 0 0 15px rgba(92, 14, 27, 0.6); }
+        
         .dashboard-card { background: linear-gradient(135deg, #0a0a0a, #140508); border: 1px solid var(--burgundy-dark); border-radius: 24px; padding: 50px 20px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.9); position: relative; overflow: hidden; }
         .dashboard-card::before { content: ''; position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(92,14,27,0.3) 0%, transparent 70%); }
+        
         .greeting { font-size: 2.5rem; color: var(--cream); margin-bottom: 10px; font-weight: bold; }
         .clock { font-size: 4rem; color: var(--burgundy-light); font-weight: bold; margin: 20px 0; text-shadow: 0 0 30px rgba(92,14,27,0.6); letter-spacing: 2px; }
         .date { font-size: 1.2rem; color: var(--beige); margin-bottom: 30px; }
@@ -28,6 +30,7 @@
     </style>
 </head>
 <body>
+
 <div class="app-wrapper">
     <nav class="navbar">
         <a href="index.html" class="nav-btn active"><i class="fa-solid fa-house"></i> Home</a>
@@ -36,6 +39,7 @@
         <a href="timer.html" class="nav-btn"><i class="fa-solid fa-clock"></i> Timer</a>
         <a href="links.html" class="nav-btn"><i class="fa-solid fa-link"></i> Links</a>
     </nav>
+
     <div class="dashboard-card">
         <div class="greeting" id="greeting">Welcome Back!</div>
         <div class="clock" id="clock">00:00:00</div>
@@ -43,12 +47,15 @@
         <div class="quote-box" id="quote">"The secret of getting ahead is getting started."</div>
     </div>
 </div>
+
 <script>
     function updateTime() {
         const now = new Date();
         document.getElementById('clock').innerText = now.toLocaleTimeString('en-US', { hour12: false });
+        
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         document.getElementById('date').innerText = now.toLocaleDateString('en-US', options);
+
         const hour = now.getHours();
         let greeting = "Welcome Back!";
         if (hour < 12) greeting = "Good Morning!";
@@ -56,9 +63,17 @@
         else greeting = "Good Evening!";
         document.getElementById('greeting').innerText = greeting;
     }
-    setInterval(updateTime, 1000); updateTime();
-    const quotes = ["The secret of getting ahead is getting started.", "It always seems impossible until it's done.", "Don't watch the clock; do what it does. Keep going.", "Believe you can and you're halfway there."];
+    setInterval(updateTime, 1000); 
+    updateTime();
+
+    const quotes = [
+        "The secret of getting ahead is getting started.",
+        "It always seems impossible until it's done.",
+        "Don't watch the clock; do what it does. Keep going.",
+        "Believe you can and you're halfway there."
+    ];
     document.getElementById('quote').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
 </script>
+
 </body>
 </html>
