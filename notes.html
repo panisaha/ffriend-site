@@ -16,6 +16,7 @@
         
         .app-wrapper { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 20px; }
 
+        /* منوی ناوبری */
         .navbar { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; }
         .nav-btn {
             background-color: var(--bg-card); color: var(--beige); text-decoration: none;
@@ -82,13 +83,34 @@
             text-align: left; direction: ltr;
         }
         .notepad:focus { border-color: var(--burgundy-light); box-shadow: 0 0 10px rgba(92,14,27,0.3); }
+
+        /* --- استایل کادر پاپ‌آپ اختصاصی --- */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px);
+            z-index: 1000; justify-content: center; align-items: center;
+        }
+        .modal-box {
+            background-color: var(--bg-card); border: 1px solid var(--burgundy-light);
+            padding: 30px; border-radius: 20px; width: 90%; max-width: 350px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9); animation: fadeIn 0.3s ease; text-align: center;
+        }
+        .modal-box p { font-size: 1.1rem; margin-bottom: 25px; color: var(--cream); }
+        .modal-btns { display: flex; gap: 10px; }
+        .btn-modal { flex: 1; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; border: none; transition: 0.3s; font-size: 1rem; }
+        .btn-yes { background-color: var(--burgundy-light); color: var(--cream); }
+        .btn-yes:hover { background-color: var(--burgundy-dark); }
+        .btn-no { background-color: #333; color: var(--cream); }
+        .btn-no:hover { background-color: #555; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body>
 
 <div class="app-wrapper">
     <nav class="navbar">
-        <a href="index.html" class="nav-btn"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="home.html" class="nav-btn"><i class="fa-solid fa-house"></i> Home</a>
         <a href="notes.html" class="nav-btn active"><i class="fa-solid fa-book-open"></i> Notes</a>
         <a href="tasks.html" class="nav-btn"><i class="fa-solid fa-list-check"></i> Tasks</a>
         <a href="timer.html" class="nav-btn"><i class="fa-solid fa-clock"></i> Timer</a>
@@ -106,7 +128,7 @@
     <div class="editor-container" id="editorContainer">
         <div class="editor-header">
             <div class="editor-title" id="currentNoteTitle"></div>
-            <button class="delete-note-btn" onclick="deleteCurrentNote()" title="Delete this note"><i class="fa-solid fa-trash"></i></button>
+            <button class="delete-note-btn" onclick="askDeleteNote()" title="Delete this note"><i class="fa-solid fa-trash"></i></button>
         </div>
         
         <div class="highlighter-tools">
@@ -115,10 +137,21 @@
             <div class="color-btn" style="background: #556b2f;" onclick="setHighlight('#556b2f', '#fff')"></div>
             <div class="color-btn" style="background: #1a2a3a;" onclick="setHighlight('#1a2a3a', '#fff')"></div>
             <div class="color-btn" style="background: #a0522d;" onclick="setHighlight('#a0522d', '#fff')"></div>
-            <div class="color-btn" style="background: transparent; border-color: var(--cream);" onclick="setHighlight('transparent', 'inherit')"><i class="fa-solid fa-eraser" style="font-size: 12px; color: var(--cream);"></i></div>
+            <div class="color-btn" style="background: transparent; border-color: var(--cream);" onclick="setHighlight('transparent', 'inherit')" title="Remove Highlight"><i class="fa-solid fa-eraser" style="font-size: 12px; color: var(--cream);"></i></div>
         </div>
 
         <div class="notepad" id="notepad" contenteditable="true"></div>
+    </div>
+</div>
+
+<!-- کادر پاپ‌آپ تایید حذف -->
+<div class="modal-overlay" id="deleteModal">
+    <div class="modal-box">
+        <p>Are you sure you want to delete this note?</p>
+        <div class="modal-btns">
+            <button class="btn-modal btn-yes" onclick="confirmDeleteNote()">Yes, Delete</button>
+            <button class="btn-modal btn-no" onclick="closeDeleteModal()">Cancel</button>
+        </div>
     </div>
 </div>
 
@@ -133,7 +166,10 @@
     function createNote() {
         const titleInput = document.getElementById('newNoteTitle');
         const title = titleInput.value.trim();
-        if (!title) return alert("Please enter a title for the note!");
+        if (!title) {
+            alert("Please enter a title for the note!"); // این یکی رو گذاشتیم چون خیلی مهمه
+            return;
+        }
 
         const newNote = {
             id: Date.now().toString(),
@@ -184,15 +220,22 @@
         renderNotes();
     }
 
-    function deleteCurrentNote() {
+    function askDeleteNote() {
         if (!currentNoteId) return;
-        if (confirm("Are you sure you want to delete this note?")) {
-            notes = notes.filter(n => n.id !== currentNoteId);
-            currentNoteId = null;
-            saveData();
-            document.getElementById('editorContainer').style.display = 'none';
-            renderNotes();
-        }
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    function confirmDeleteNote() {
+        notes = notes.filter(n => n.id !== currentNoteId);
+        currentNoteId = null;
+        saveData();
+        document.getElementById('editorContainer').style.display = 'none';
+        renderNotes();
+        closeDeleteModal();
     }
 
     document.getElementById('notepad').addEventListener('input', function() {
@@ -213,22 +256,28 @@
         textColor = fgColor;
     }
 
-    document.getElementById('notepad').addEventListener('mouseup', () => {
-        const selection = window.getSelection();
-        const notepad = document.getElementById('notepad');
-        
-        if (!selection.isCollapsed && notepad.contains(selection.anchorNode)) {
-            const range = selection.getRangeAt(0);
-            const span = document.createElement('span');
-            span.style.backgroundColor = selectedColor;
-            if (textColor !== 'inherit') span.style.color = textColor;
-            span.appendChild(range.extractContents());
-            range.insertNode(span);
+    // این بخش برای اینه که وقتی متن رو با انگشت انتخاب کردی و رها کردی، رنگ اعمال بشه
+    document.getElementById('notepad').addEventListener('touchend', applyHighlight);
+    document.getElementById('notepad').addEventListener('mouseup', applyHighlight);
+
+    function applyHighlight() {
+        setTimeout(() => { // یه تاخیر کوچیک برای اینکه گوشی فرصت کنه متن رو انتخاب کنه
+            const selection = window.getSelection();
+            const notepad = document.getElementById('notepad');
             
-            selection.removeAllRanges();
-            document.getElementById('notepad').dispatchEvent(new Event('input'));
-        }
-    });
+            if (!selection.isCollapsed && notepad.contains(selection.anchorNode)) {
+                const range = selection.getRangeAt(0);
+                const span = document.createElement('span');
+                span.style.backgroundColor = selectedColor;
+                if (textColor !== 'inherit') span.style.color = textColor;
+                span.appendChild(range.extractContents());
+                range.insertNode(span);
+                
+                selection.removeAllRanges();
+                notepad.dispatchEvent(new Event('input'));
+            }
+        }, 100);
+    }
 
     renderNotes();
 </script>
