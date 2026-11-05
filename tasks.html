@@ -55,14 +55,15 @@
         
         .input-field {
             width: 100%; padding: 14px 18px; 
-            background-color: rgba(255, 255, 255, 0.05); /* شیشه‌ای شفاف */
-            border: 1px solid var(--burgundy-light); /* حاشیه زرشکی */
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--burgundy-light);
             border-radius: 12px;
             color: var(--cream); 
             outline: none; 
             transition: 0.3s; 
             font-size: 1rem;
             box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+            cursor: pointer;
         }
         
         .input-field:focus { 
@@ -70,10 +71,6 @@
             border-color: var(--hanai); 
             box-shadow: 0 0 15px rgba(92, 14, 27, 0.4); 
         }
-        
-        input[type="date"] { color-scheme: dark; cursor: pointer; }
-        select.input-field { cursor: pointer; }
-        option { background-color: var(--bg-card); color: var(--cream); }
 
         .btn-add {
             background-color: var(--burgundy-light); color: var(--cream); border: 1px solid var(--burgundy-dark);
@@ -107,6 +104,52 @@
         .prio-Medium { border-right-color: var(--yellow); }
         .prio-Low { border-right-color: var(--green); }
 
+        /* --- استایل کادرهای پاپ‌آپ (Modal) --- */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px);
+            z-index: 1000; justify-content: center; align-items: center;
+        }
+        .modal-box {
+            background-color: var(--bg-card); border: 1px solid var(--burgundy-light);
+            padding: 25px; border-radius: 20px; width: 90%; max-width: 350px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9); animation: fadeIn 0.3s ease;
+            text-align: center;
+        }
+        .modal-box h3 { color: var(--cream); margin-bottom: 20px; font-size: 1.2rem; }
+        
+        /* دکمه‌های انتخاب */
+        .select-btn {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255,255,255,0.05); border: 1px solid #333; color: var(--cream);
+            padding: 15px; border-radius: 12px; margin-bottom: 10px; cursor: pointer; transition: 0.3s;
+            font-size: 1rem;
+        }
+        .select-btn:hover { background: var(--burgundy-dark); border-color: var(--burgundy-light); }
+        .select-btn.selected { border-color: var(--cream); background: var(--burgundy-dark); }
+        
+        /* دکمه‌های مودال */
+        .modal-close {
+            background-color: #333; color: var(--cream); border: none;
+            padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer;
+            width: 100%; margin-top: 15px; transition: 0.3s;
+        }
+        .modal-close:hover { background-color: #555; }
+
+        /* استایل تقویم اختصاصی */
+        .calendar-grid {
+            display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px;
+            margin-bottom: 15px; direction: ltr; /* برای اینکه روزهای هفته درست بچینن */
+        }
+        .cal-day-name { color: var(--beige); font-size: 0.8rem; font-weight: bold; margin-bottom: 5px; }
+        .cal-day {
+            padding: 10px 5px; border-radius: 8px; background: rgba(255,255,255,0.05);
+            cursor: pointer; transition: 0.2s; font-size: 0.9rem;
+        }
+        .cal-day:hover { background: var(--burgundy-dark); }
+        .cal-day.selected { background: var(--burgundy-light); color: var(--cream); font-weight: bold; }
+        .cal-day.empty { background: transparent; cursor: default; }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -133,21 +176,145 @@
 
     <div class="task-form">
         <input type="text" id="taskInput" class="input-field" placeholder="What needs to be done?">
-        <input type="date" id="taskDate" class="input-field">
-        <select id="taskPriority" class="input-field">
-            <option value="High">🔴 High Priority</option>
-            <option value="Medium" selected>🟡 Medium Priority</option>
-            <option value="Low">🟢 Low Priority</option>
-        </select>
+        
+        <!-- دکمه‌هایی که کادر پاپ‌آپ باز میکنن -->
+        <div id="dateDisplay" class="input-field" onclick="openModal('dateModal')">
+            <i class="fa-regular fa-calendar"></i> Select Due Date
+        </div>
+        
+        <div id="priorityDisplay" class="input-field" onclick="openModal('priorityModal')">
+            <i class="fa-solid fa-flag"></i> <span>Medium Priority</span>
+        </div>
+
         <button class="btn-add" onclick="addTask()"><i class="fa-solid fa-plus"></i> Add Task</button>
     </div>
 
     <ul class="task-list" id="taskList"></ul>
 </div>
 
+<!-- مودال تقویم -->
+<div class="modal-overlay" id="dateModal">
+    <div class="modal-box">
+        <h3>Select Date</h3>
+        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+            <button onclick="changeMonth(-1)" style="background:none; border:none; color:var(--cream); cursor:pointer;"><i class="fa-solid fa-chevron-right"></i></button>
+            <span id="monthYearDisplay" style="font-weight:bold;"></span>
+            <button onclick="changeMonth(1)" style="background:none; border:none; color:var(--cream); cursor:pointer;"><i class="fa-solid fa-chevron-left"></i></button>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+        <button class="modal-close" onclick="closeModal('dateModal')">Cancel</button>
+    </div>
+</div>
+
+<!-- مودال اولویت -->
+<div class="modal-overlay" id="priorityModal">
+    <div class="modal-box">
+        <h3>Select Priority</h3>
+        <div class="select-btn" onclick="setPriority('High', this)">
+            <span>🔴 High Priority</span>
+            <i class="fa-solid fa-check" style="opacity:0; color:var(--green);"></i>
+        </div>
+        <div class="select-btn selected" onclick="setPriority('Medium', this)">
+            <span>🟡 Medium Priority</span>
+            <i class="fa-solid fa-check" style="color:var(--green);"></i>
+        </div>
+        <div class="select-btn" onclick="setPriority('Low', this)">
+            <span>🟢 Low Priority</span>
+            <i class="fa-solid fa-check" style="opacity:0; color:var(--green);"></i>
+        </div>
+        <button class="modal-close" onclick="closeModal('priorityModal')">Cancel</button>
+    </div>
+</div>
+
 <script>
     let tasks = JSON.parse(localStorage.getItem('friendTasks')) || [];
+    let selectedDate = '';
+    let selectedPriority = 'Medium';
+    
+    // --- تقویم ---
+    let currentDate = new Date();
+    let currentMonth = currentDate.getMonth();
+    let currentYear = currentDate.getFullYear();
 
+    function openModal(id) {
+        document.getElementById(id).style.display = 'flex';
+        if(id === 'dateModal') renderCalendar();
+    }
+    
+    function closeModal(id) {
+        document.getElementById(id).style.display = 'none';
+    }
+
+    function renderCalendar() {
+        const grid = document.getElementById('calendarGrid');
+        grid.innerHTML = '';
+        
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        document.getElementById('monthYearDisplay').innerText = `${months[currentMonth]} ${currentYear}`;
+
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+
+        // نام روزهای هفته
+        const dayNames = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+        dayNames.forEach(day => {
+            const el = document.createElement('div');
+            el.className = 'cal-day-name';
+            el.innerText = day;
+            grid.appendChild(el);
+        });
+
+        // روزهای خالی اول ماه
+        for(let i=0; i<firstDay; i++) {
+            const el = document.createElement('div');
+            el.className = 'cal-day empty';
+            grid.appendChild(el);
+        }
+
+        // روزهای ماه
+        for(let i=1; i<=daysInMonth; i++) {
+            const el = document.createElement('div');
+            el.className = 'cal-day';
+            el.innerText = i;
+            
+            // فرمت دهی به تاریخ (مثلا 2026-11-05)
+            const formattedMonth = (currentMonth + 1).toString().padStart(2, '0');
+            const formattedDay = i.toString().padStart(2, '0');
+            const dateStr = `${currentYear}-${formattedMonth}-${formattedDay}`;
+            
+            el.onclick = () => {
+                selectedDate = dateStr;
+                document.getElementById('dateDisplay').innerHTML = `<i class="fa-regular fa-calendar"></i> ${dateStr}`;
+                closeModal('dateModal');
+            };
+            grid.appendChild(el);
+        }
+    }
+
+    function changeMonth(dir) {
+        currentMonth += dir;
+        if(currentMonth > 11) { currentMonth = 0; currentYear++; }
+        if(currentMonth < 0) { currentMonth = 11; currentYear--; }
+        renderCalendar();
+    }
+
+    // --- اولویت ---
+    function setPriority(level, el) {
+        selectedPriority = level;
+        document.getElementById('priorityDisplay').innerHTML = `<i class="fa-solid fa-flag"></i> <span>${level} Priority</span>`;
+        
+        // آپدیت دکمه‌های انتخاب شده
+        document.querySelectorAll('.select-btn').forEach(btn => {
+            btn.classList.remove('selected');
+            btn.querySelector('i').style.opacity = '0';
+        });
+        el.classList.add('selected');
+        el.querySelector('i').style.opacity = '1';
+        
+        closeModal('priorityModal');
+    }
+
+    // --- تسک‌ها ---
     function saveTasks() {
         localStorage.setItem('friendTasks', JSON.stringify(tasks));
         updateProgress();
@@ -155,22 +322,23 @@
 
     function addTask() {
         const text = document.getElementById('taskInput').value.trim();
-        const date = document.getElementById('taskDate').value;
-        const priority = document.getElementById('taskPriority').value;
 
         if (!text) return alert("Please enter a task description!");
 
         const newTask = {
             id: Date.now().toString(),
             text: text,
-            date: date || 'No due date',
-            priority: priority,
+            date: selectedDate || 'No due date',
+            priority: selectedPriority,
             done: false
         };
 
         tasks.push(newTask);
         document.getElementById('taskInput').value = '';
-        document.getElementById('taskDate').value = '';
+        
+        // ریست کردن فرم
+        selectedDate = '';
+        document.getElementById('dateDisplay').innerHTML = `<i class="fa-regular fa-calendar"></i> Select Due Date`;
         
         saveTasks();
         renderTasks();
@@ -243,4 +411,4 @@
 </script>
 
 </body>
-</html>
+                </html>
