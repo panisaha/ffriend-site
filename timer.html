@@ -83,11 +83,11 @@
         .settings-row label { font-weight: bold; color: var(--beige); }
         
         .input-number {
-            width: 80px; padding: 10px; background-color: #0a0a0a; color: var(--cream);
-            border: 1px solid #333; border-radius: 8px; text-align: center; font-size: 1.1rem;
+            width: 80px; padding: 10px; background-color: rgba(255,255,255,0.05); color: var(--cream);
+            border: 1px solid var(--burgundy-light); border-radius: 8px; text-align: center; font-size: 1.1rem;
             outline: none;
         }
-        .input-number:focus { border-color: var(--burgundy-light); }
+        .input-number:focus { border-color: var(--hanai); box-shadow: 0 0 10px rgba(92,14,27,0.4); }
         
         .btn-save {
             background-color: var(--burgundy-light); color: var(--cream); border: none;
@@ -95,6 +95,29 @@
             transition: 0.3s; width: 100%;
         }
         .btn-save:hover { background-color: var(--burgundy-dark); }
+
+        /* استایل پیام شیک (Toast) */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: var(--burgundy-light);
+            color: var(--cream);
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            border: 1px solid var(--cream);
+            transition: transform 0.4s ease, opacity 0.4s ease;
+            opacity: 0;
+            z-index: 2000;
+            pointer-events: none;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -135,16 +158,19 @@
     </div>
 </div>
 
+<!-- پیام شیک -->
+<div id="toast" class="toast">Settings Saved!</div>
+
 <script>
     // --- صدا ---
-    // استفاده از Web Audio API برای ساخت صدای بیپ آفلاین (بدون نیاز به فایل خارجی)
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playDing() {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
         const oscillator = audioCtx.createOscillator();
         const gainNode = audioCtx.createGain();
         
         oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // فرکانس 880 هرتز (صدای دینگ)
+        oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
         
         gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
         gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.05);
@@ -180,8 +206,6 @@
 
     function startTimer() {
         if (isRunning) return;
-        
-        // فعال کردن صدا در اولین کلیک (به خاطر محدودیت مرورگرها)
         if (audioCtx.state === 'suspended') audioCtx.resume();
         
         isRunning = true;
@@ -190,7 +214,6 @@
                 timeLeft--;
                 updateDisplay();
             } else {
-                // زمان تموم شد
                 switchMode();
             }
         }, 1000);
@@ -212,7 +235,7 @@
     }
 
     function switchMode() {
-        playDing(); // پخش صدا
+        playDing();
         isWorkMode = !isWorkMode;
         
         if (isWorkMode) {
@@ -220,13 +243,13 @@
             document.getElementById('timerContainer').classList.remove('break-mode');
             document.getElementById('modeLabel').innerText = "Focus Time";
             document.getElementById('modeLabel').className = "mode-label work";
-            sendNotification("Back to Work!", "Break is over. Let's focus!");
+            showToast("Back to Work!");
         } else {
             timeLeft = breakTime * 60;
             document.getElementById('timerContainer').classList.add('break-mode');
             document.getElementById('modeLabel').innerText = "Break Time";
             document.getElementById('modeLabel').className = "mode-label break";
-            sendNotification("Break Time!", "Great job! Take a rest.");
+            showToast("Break Time!");
         }
         updateDisplay();
     }
@@ -238,23 +261,23 @@
         localStorage.setItem('workTime', workTime);
         localStorage.setItem('breakTime', breakTime);
         
-        alert("Settings Saved!");
+        showToast("Settings Saved Successfully!");
         resetTimer();
     }
 
-    // --- نوتیفیکیشن ---
-    function sendNotification(title, body) {
-        if (!("Notification" in window)) return;
-        
-        if (Notification.permission === "granted") {
-            new Notification(title, { body: body });
-        } else if (Notification.permission !== "denied") {
-            Notification.requestPermission().then(permission => {
-                if (permission === "granted") {
-                    new Notification(title, { body: body });
-                }
-            });
-        }
+    // تابع نمایش پیام شیک
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.innerText = message;
+        toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+
+    // درخواست اجازه نوتیفیکیشن اولیه
+    if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
+        Notification.requestPermission();
     }
 </script>
 
