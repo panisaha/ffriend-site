@@ -4,45 +4,114 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timer - My Study Planner</title>
-    <link rel="apple-touch-icon" href="icon-192x192.png">
     <link rel="icon" type="image/png" href="icon-192x192.png">
-    <link rel="manifest" href="manifest.json">
-    <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js');
-      }
-    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --bg-main: #050505; --bg-card: #111111; --burgundy-dark: #2a050a; --burgundy-light: #5c0e1b; --olive: #556b2f; --olive-light: #6b8e23; --cream: #e8e0d0; --beige: #a89b8c; --hanai: #7a3e28; }
+        :root {
+            --bg-main: #050505; --bg-card: #111111; --burgundy-dark: #2a050a;
+            --burgundy-light: #5c0e1b; --olive: #556b2f; --olive-light: #6b8e23;
+            --cream: #e8e0d0; --beige: #a89b8c; --hanai: #7a3e28;
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: var(--bg-main); color: var(--cream); display: flex; justify-content: center; min-height: 100vh; padding: 20px; }
+        
         .app-wrapper { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 20px; }
+
         .navbar { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; }
-        .nav-btn { background-color: var(--bg-card); color: var(--beige); text-decoration: none; padding: 10px 20px; border-radius: 12px; border: 1px solid var(--burgundy-dark); display: flex; align-items: center; gap: 8px; font-weight: bold; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .nav-btn {
+            background-color: var(--bg-card); color: var(--beige); text-decoration: none;
+            padding: 10px 20px; border-radius: 12px; border: 1px solid var(--burgundy-dark);
+            display: flex; align-items: center; gap: 8px; font-weight: bold; transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
         .nav-btn:hover { background-color: var(--burgundy-dark); color: var(--cream); transform: translateY(-2px); }
         .nav-btn.active { background-color: var(--burgundy-light); color: var(--cream); border-color: var(--cream); box-shadow: 0 0 15px rgba(92, 14, 27, 0.6); }
-        .timer-container { background-color: var(--bg-card); border: 2px solid var(--burgundy-light); border-radius: 24px; padding: 50px 20px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 15px 40px rgba(0,0,0,0.9); transition: all 0.5s ease; }
-        .timer-container.break-mode { border-color: var(--olive); box-shadow: 0 15px 40px rgba(85, 107, 47, 0.4); }
+
+        .timer-container {
+            background-color: var(--bg-card);
+            border: 2px solid var(--burgundy-light);
+            border-radius: 24px;
+            padding: 50px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.9);
+            transition: all 0.5s ease;
+        }
+
+        .timer-container.break-mode {
+            border-color: var(--olive);
+            box-shadow: 0 15px 40px rgba(85, 107, 47, 0.4);
+        }
+
         .mode-label { font-size: 1.2rem; letter-spacing: 2px; margin-bottom: 10px; font-weight: bold; text-transform: uppercase; }
         .mode-label.work { color: var(--burgundy-light); text-shadow: 0 0 10px rgba(92,14,27,0.5); }
         .mode-label.break { color: var(--olive-light); text-shadow: 0 0 10px rgba(107,142,35,0.5); }
-        .time-display { font-size: 6rem; font-weight: 900; color: var(--cream); margin: 20px 0; text-shadow: 0 0 20px rgba(255,255,255,0.1); font-variant-numeric: tabular-nums; }
+
+        .time-display {
+            font-size: 6rem;
+            font-weight: 900;
+            color: var(--cream);
+            margin: 20px 0;
+            text-shadow: 0 0 20px rgba(255,255,255,0.1);
+            font-variant-numeric: tabular-nums;
+        }
+
         .controls { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; justify-content: center; }
-        .btn-ctrl { background-color: var(--bg-main); color: var(--cream); border: 2px solid var(--burgundy-dark); padding: 15px 30px; border-radius: 30px; font-size: 1.2rem; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 10px; }
+        .btn-ctrl {
+            background-color: var(--bg-main); color: var(--cream);
+            border: 2px solid var(--burgundy-dark); padding: 15px 30px;
+            border-radius: 30px; font-size: 1.2rem; cursor: pointer;
+            transition: all 0.3s; display: flex; align-items: center; gap: 10px;
+        }
         .btn-ctrl:hover { background-color: var(--burgundy-dark); transform: scale(1.05); }
-        .settings-container { background-color: var(--bg-card); border: 1px solid var(--burgundy-dark); padding: 20px; border-radius: 15px; display: flex; flex-direction: column; gap: 15px; }
+        
+        .settings-container {
+            background-color: var(--bg-card); border: 1px solid var(--burgundy-dark);
+            padding: 20px; border-radius: 15px; display: flex; flex-direction: column; gap: 15px;
+        }
         .settings-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .settings-row label { font-weight: bold; color: var(--beige); }
-        .input-number { width: 80px; padding: 10px; background-color: rgba(255,255,255,0.05); color: var(--cream); border: 1px solid var(--burgundy-light); border-radius: 8px; text-align: center; font-size: 1.1rem; outline: none; }
+        
+        .input-number {
+            width: 80px; padding: 10px; background-color: rgba(255,255,255,0.05); color: var(--cream);
+            border: 1px solid var(--burgundy-light); border-radius: 8px; text-align: center; font-size: 1.1rem;
+            outline: none;
+        }
         .input-number:focus { border-color: var(--hanai); box-shadow: 0 0 10px rgba(92,14,27,0.4); }
-        .btn-save { background-color: var(--burgundy-light); color: var(--cream); border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%; }
+        
+        .btn-save {
+            background-color: var(--burgundy-light); color: var(--cream); border: none;
+            padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer;
+            transition: 0.3s; width: 100%;
+        }
         .btn-save:hover { background-color: var(--burgundy-dark); }
-        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background-color: var(--burgundy-light); color: var(--cream); padding: 15px 30px; border-radius: 30px; font-weight: bold; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border: 1px solid var(--cream); transition: transform 0.4s ease, opacity 0.4s ease; opacity: 0; z-index: 2000; pointer-events: none; }
-        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: var(--burgundy-light);
+            color: var(--cream);
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            border: 1px solid var(--cream);
+            transition: transform 0.4s ease, opacity 0.4s ease;
+            opacity: 0;
+            z-index: 2000;
+            pointer-events: none;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
+
 <div class="app-wrapper">
     <nav class="navbar">
         <a href="index.html" class="nav-btn"><i class="fa-solid fa-house"></i> Home</a>
@@ -51,76 +120,146 @@
         <a href="timer.html" class="nav-btn active"><i class="fa-solid fa-clock"></i> Timer</a>
         <a href="links.html" class="nav-btn"><i class="fa-solid fa-link"></i> Links</a>
     </nav>
+
     <div class="timer-container" id="timerContainer">
         <div class="mode-label work" id="modeLabel">Focus Time</div>
         <div class="time-display" id="timeDisplay">25:00</div>
+        
         <div class="controls">
             <button class="btn-ctrl" id="startBtn" onclick="startTimer()"><i class="fa-solid fa-play"></i> Start</button>
             <button class="btn-ctrl" onclick="pauseTimer()"><i class="fa-solid fa-pause"></i> Pause</button>
             <button class="btn-ctrl" onclick="resetTimer()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
         </div>
     </div>
+
     <div class="settings-container">
-        <div class="settings-row"><label>Focus Time (minutes)</label><input type="number" id="workInput" class="input-number" value="25" min="1" max="120"></div>
-        <div class="settings-row"><label>Break Time (minutes)</label><input type="number" id="breakInput" class="input-number" value="5" min="1" max="60"></div>
+        <div class="settings-row">
+            <label>Focus Time (minutes)</label>
+            <input type="number" id="workInput" class="input-number" value="25" min="1" max="120">
+        </div>
+        <div class="settings-row">
+            <label>Break Time (minutes)</label>
+            <input type="number" id="breakInput" class="input-number" value="5" min="1" max="60">
+        </div>
         <button class="btn-save" onclick="saveSettings()">Save Settings</button>
     </div>
 </div>
+
 <div id="toast" class="toast">Settings Saved!</div>
+
 <script>
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playDing() {
         if (audioCtx.state === 'suspended') audioCtx.resume();
-        const oscillator = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
-        oscillator.type = 'sine'; oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
+        
         gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
         gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.05);
         gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
-        oscillator.connect(gainNode); gainNode.connect(audioCtx.destination);
-        oscillator.start(); oscillator.stop(audioCtx.currentTime + 1.5);
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 1.5);
     }
+
     let workTime = parseInt(localStorage.getItem('workTime')) || 25;
     let breakTime = parseInt(localStorage.getItem('breakTime')) || 5;
-    let timeLeft = workTime * 60; let timerInterval = null; let isRunning = false; let isWorkMode = true;
-    document.getElementById('workInput').value = workTime; document.getElementById('breakInput').value = breakTime; updateDisplay();
+    let timeLeft = workTime * 60;
+    let timerInterval = null;
+    let isRunning = false;
+    let isWorkMode = true;
+
+    document.getElementById('workInput').value = workTime;
+    document.getElementById('breakInput').value = breakTime;
+    updateDisplay();
+
     function updateDisplay() {
-        const minutes = Math.floor(timeLeft / 60); const seconds = timeLeft % 60;
-        document.getElementById('timeDisplay').innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        document.getElementById('timeDisplay').innerText = 
+            `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }
+
     function startTimer() {
-        if (isRunning) return; if (audioCtx.state === 'suspended') audioCtx.resume();
+        if (isRunning) return;
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        
         isRunning = true;
         timerInterval = setInterval(() => {
-            if (timeLeft > 0) { timeLeft--; updateDisplay(); } else { switchMode(); }
+            if (timeLeft > 0) {
+                timeLeft--;
+                updateDisplay();
+            } else {
+                switchMode();
+            }
         }, 1000);
     }
-    function pauseTimer() { isRunning = false; clearInterval(timerInterval); }
-    function resetTimer() {
-        pauseTimer(); isWorkMode = true; timeLeft = workTime * 60;
-        document.getElementById('timerContainer').classList.remove('break-mode');
-        document.getElementById('modeLabel').innerText = "Focus Time"; document.getElementById('modeLabel').className = "mode-label work"; updateDisplay();
+
+    function pauseTimer() {
+        isRunning = false;
+        clearInterval(timerInterval);
     }
+
+    function resetTimer() {
+        pauseTimer();
+        isWorkMode = true;
+        timeLeft = workTime * 60;
+        document.getElementById('timerContainer').classList.remove('break-mode');
+        document.getElementById('modeLabel').innerText = "Focus Time";
+        document.getElementById('modeLabel').className = "mode-label work";
+        updateDisplay();
+    }
+
     function switchMode() {
-        playDing(); isWorkMode = !isWorkMode;
+        playDing();
+        isWorkMode = !isWorkMode;
+        
         if (isWorkMode) {
-            timeLeft = workTime * 60; document.getElementById('timerContainer').classList.remove('break-mode');
-            document.getElementById('modeLabel').innerText = "Focus Time"; document.getElementById('modeLabel').className = "mode-label work"; showToast("Back to Work!");
+            timeLeft = workTime * 60;
+            document.getElementById('timerContainer').classList.remove('break-mode');
+            document.getElementById('modeLabel').innerText = "Focus Time";
+            document.getElementById('modeLabel').className = "mode-label work";
+            showToast("Back to Work!");
         } else {
-            timeLeft = breakTime * 60; document.getElementById('timerContainer').classList.add('break-mode');
-            document.getElementById('modeLabel').innerText = "Break Time"; document.getElementById('modeLabel').className = "mode-label break"; showToast("Break Time!");
+            timeLeft = breakTime * 60;
+            document.getElementById('timerContainer').classList.add('break-mode');
+            document.getElementById('modeLabel').innerText = "Break Time";
+            document.getElementById('modeLabel').className = "mode-label break";
+            showToast("Break Time!");
         }
         updateDisplay();
     }
+
     function saveSettings() {
-        workTime = parseInt(document.getElementById('workInput').value); breakTime = parseInt(document.getElementById('breakInput').value);
-        localStorage.setItem('workTime', workTime); localStorage.setItem('breakTime', breakTime);
-        showToast("Settings Saved Successfully!"); resetTimer();
+        workTime = parseInt(document.getElementById('workInput').value);
+        breakTime = parseInt(document.getElementById('breakInput').value);
+        
+        localStorage.setItem('workTime', workTime);
+        localStorage.setItem('breakTime', breakTime);
+        
+        showToast("Settings Saved Successfully!");
+        resetTimer();
     }
+
     function showToast(message) {
-        const toast = document.getElementById('toast'); toast.innerText = message; toast.classList.add('show');
-        setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        const toast = document.getElementById('toast');
+        toast.innerText = message;
+        toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
     }
-    if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") { Notification.requestPermission(); }
+
+    if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
+        Notification.requestPermission();
+    }
 </script>
+
 </body>
 </html>
