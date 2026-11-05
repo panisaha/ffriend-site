@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks - My Study Planner</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-main: #050505;
+            --bg-card: #111111;
+            --burgundy-dark: #2a050a;
+            --burgundy-light: #5c0e1b;
+            --cream: #e8e0d0;
+            --beige: #a89b8c;
+            --hanai: #7a3e28;
+            --green: #4caf50;
+            --yellow: #ffc107;
+            --red: #f44336;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--cream); display: flex; justify-content: center; min-height: 100vh; padding: 20px; }
+        
+        .app-wrapper { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 20px; }
+
+        /* منوی ناوبری */
+        .navbar { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; }
+        .nav-btn {
+            background-color: var(--bg-card); color: var(--beige); text-decoration: none;
+            padding: 10px 20px; border-radius: 12px; border: 1px solid var(--burgundy-dark);
+            display: flex; align-items: center; gap: 8px; font-weight: bold; transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .nav-btn:hover { background-color: var(--burgundy-dark); color: var(--cream); transform: translateY(-2px); }
+        .nav-btn.active { background-color: var(--burgundy-light); color: var(--cream); border-color: var(--cream); box-shadow: 0 0 15px rgba(92, 14, 27, 0.6); }
+
+        /* نوار پیشرفت */
+        .progress-container {
+            background-color: var(--bg-card); border: 1px solid var(--burgundy-dark);
+            border-radius: 15px; padding: 20px; margin-bottom: 10px;
+        }
+        .progress-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold; }
+        .progress-bar-bg {
+            width: 100%; height: 12px; background-color: #222; border-radius: 10px; overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%; width: 0%; background: linear-gradient(90deg, var(--burgundy-light), var(--hanai));
+            border-radius: 10px; transition: width 0.5s ease;
+        }
+
+        /* فرم افزودن کار */
+        .task-form {
+            background-color: var(--bg-card); border: 1px solid var(--burgundy-dark);
+            padding: 20px; border-radius: 15px; display: flex; flex-direction: column; gap: 15px;
+        }
+        .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
+        
+        .input-field {
+            flex: 1; min-width: 150px; padding: 12px 15px; 
+            background-color: #0a0a0a; border: 1px solid #222; border-radius: 10px;
+            color: var(--cream); outline: none; transition: 0.3s;
+        }
+        .input-field:focus { border-color: var(--burgundy-light); box-shadow: 0 0 10px rgba(92,14,27,0.3); }
+        
+        select.input-field { cursor: pointer; }
+        option { background-color: var(--bg-card); color: var(--cream); }
+
+        .btn-add {
+            background-color: var(--burgundy-light); color: var(--cream); border: 1px solid var(--burgundy-dark);
+            padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; transition: 0.3s;
+        }
+        .btn-add:hover { background-color: var(--burgundy-dark); transform: scale(1.02); }
+
+        /* لیست کارها */
+        .task-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .task-item {
+            background-color: var(--bg-card); border: 1px solid var(--burgundy-dark);
+            padding: 15px; border-radius: 12px; display: flex; justify-content: space-between;
+            align-items: center; border-right: 5px solid #fff; transition: 0.3s;
+        }
+        .task-item:hover { background-color: #1a1a1a; }
+        .task-item.done { opacity: 0.6; border-right-color: var(--green) !important; }
+        .task-item.done .task-text { text-decoration: line-through; color: #888; }
+
+        .task-info { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+        .task-text { font-size: 1.1rem; font-weight: bold; }
+        .task-meta { font-size: 0.85rem; color: var(--beige); display: flex; gap: 15px; }
+        
+        .task-actions { display: flex; gap: 10px; }
+        .action-btn {
+            background: none; border: none; font-size: 1.2rem; cursor: pointer; transition: 0.2s;
+        }
+        .action-btn:hover { transform: scale(1.2); }
+        .btn-done { color: var(--green); }
+        .btn-delete { color: var(--red); }
+
+        /* اولویت‌ها */
+        .prio-High { border-right-color: var(--red); }
+        .prio-Medium { border-right-color: var(--yellow); }
+        .prio-Low { border-right-color: var(--green); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="app-wrapper">
+    <!-- منوی ناوبری -->
+    <nav class="navbar">
+        <a href="index.html" class="nav-btn"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="notes.html" class="nav-btn"><i class="fa-solid fa-book-open"></i> Notes</a>
+        <a href="tasks.html" class="nav-btn active"><i class="fa-solid fa-list-check"></i> Tasks</a>
+        <a href="timer.html" class="nav-btn"><i class="fa-solid fa-clock"></i> Timer</a>
+        <a href="links.html" class="nav-btn"><i class="fa-solid fa-link"></i> Links</a>
+    </nav>
+
+    <!-- نوار پیشرفت -->
+    <div class="progress-container">
+        <div class="progress-header">
+            <span>Task Progress</span>
+            <span id="progressText">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressBar"></div>
+        </div>
+    </div>
+
+    <!-- فرم افزودن کار -->
+    <div class="task-form">
+        <div class="form-row">
+            <input type="text" id="taskInput" class="input-field" placeholder="What needs to be done?" style="flex: 2;">
+            <input type="date" id="taskDate" class="input-field">
+        </div>
+        <div class="form-row">
+            <select id="taskPriority" class="input-field">
+                <option value="High">🔴 High Priority</option>
+                <option value="Medium" selected>🟡 Medium Priority</option>
+                <option value="Low">🟢 Low Priority</option>
+            </select>
+            <button class="btn-add" onclick="addTask()"><i class="fa-solid fa-plus"></i> Add Task</button>
+        </div>
+    </div>
+
+    <!-- لیست کارها -->
+    <ul class="task-list" id="taskList"></ul>
+</div>
+
+<script>
+    let tasks = JSON.parse(localStorage.getItem('friendTasks')) || [];
+
+    function saveTasks() {
+        localStorage.setItem('friendTasks', JSON.stringify(tasks));
+        updateProgress();
+    }
+
+    function addTask() {
+        const text = document.getElementById('taskInput').value.trim();
+        const date = document.getElementById('taskDate').value;
+        const priority = document.getElementById('taskPriority').value;
+
+        if (!text) return alert("Please enter a task description!");
+
+        const newTask = {
+            id: Date.now().toString(),
+            text: text,
+            date: date || 'No due date',
+            priority: priority,
+            done: false
+        };
+
+        tasks.push(newTask);
+        document.getElementById('taskInput').value = '';
+        document.getElementById('taskDate').value = '';
+        
+        saveTasks();
+        renderTasks();
+    }
+
+    function renderTasks() {
+        const list = document.getElementById('taskList');
+        list.innerHTML = '';
+
+        // مرتب‌سازی: انجام نشده‌ها اول
+        tasks.sort((a, b) => a.done - b.done);
+
+        tasks.forEach(task => {
+            const li = document.createElement('li');
+            li.className = `task-item prio-${task.priority} ${task.done ? 'done' : ''}`;
+            li.style.animation = 'fadeIn 0.3s ease';
+            
+            li.innerHTML = `
+                <div class="task-info">
+                    <span class="task-text">${task.text}</span>
+                    <div class="task-meta">
+                        <span><i class="fa-regular fa-calendar"></i> ${task.date}</span>
+                        <span><i class="fa-solid fa-flag"></i> ${task.priority}</span>
+                    </div>
+                </div>
+                <div class="task-actions">
+                    <button class="action-btn btn-done" onclick="toggleTask('${task.id}')" title="Mark as done">
+                        <i class="fa-solid ${task.done ? 'fa-rotate-left' : 'fa-check'}"></i>
+                    </button>
+                    <button class="action-btn btn-delete" onclick="deleteTask('${task.id}')" title="Delete task">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            list.appendChild(li);
+        });
+
+        updateProgress();
+    }
+
+    function toggleTask(id) {
+        const task = tasks.find(t => t.id === id);
+        if (task) {
+            task.done = !task.done;
+            saveTasks();
+            renderTasks();
+        }
+    }
+
+    function deleteTask(id) {
+        tasks = tasks.filter(t => t.id !== id);
+        saveTasks();
+        renderTasks();
+    }
+
+    function updateProgress() {
+        if (tasks.length === 0) {
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('progressText').innerText = '0%';
+            return;
+        }
+
+        const doneCount = tasks.filter(t => t.done).length;
+        const percentage = Math.round((doneCount / tasks.length) * 100);
+        
+        document.getElementById('progressBar').style.width = `${percentage}%`;
+        document.getElementById('progressText').innerText = `${percentage}%`;
+    }
+
+    // لود اولیه
+    renderTasks();
+</script>
+
+</body>
+</html>
