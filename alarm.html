@@ -57,7 +57,6 @@
         }
         .delete-alarm-btn:hover { color: red; transform: scale(1.2); }
 
-        /* کادر پاپ‌آپ اختصاصی */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px);
@@ -77,14 +76,26 @@
         }
         .modal-input:focus { border-color: var(--burgundy-light); }
 
-        /* انتخاب روزهای هفته */
-        .days-container { display: flex; justify-content: center; gap: 5px; margin-bottom: 20px; flex-wrap: wrap; }
-        .day-btn {
-            width: 40px; height: 40px; border-radius: 50%; border: 1px solid #333;
-            background: #111; color: var(--beige); cursor: pointer; font-weight: bold;
-            transition: 0.3s; display: flex; justify-content: center; align-items: center;
+        /* --- انتخاب ساعت و دقیقه (مثل گوشی) --- */
+        .time-selector {
+            display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 20px;
         }
-        .day-btn.active { background: var(--burgundy-light); color: var(--cream); border-color: var(--cream); }
+        .time-selector select {
+            padding: 10px; border-radius: 10px; background: #0a0a0a; color: var(--cream);
+            border: 1px solid var(--burgundy-light); font-size: 1.2rem; outline: none; cursor: pointer;
+        }
+        .time-selector select:focus { border-color: var(--hanai); }
+
+        /* --- انتخاب روزها (مثل گوشی) --- */
+        .days-container { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; text-align: left; }
+        .day-option {
+            display: flex; align-items: center; gap: 10px; padding: 10px;
+            background: rgba(255,255,255,0.03); border-radius: 8px; cursor: pointer; transition: 0.2s;
+        }
+        .day-option:hover { background: rgba(92,14,27,0.3); }
+        .day-option input[type="checkbox"] {
+            width: 18px; height: 18px; accent-color: var(--burgundy-light); cursor: pointer;
+        }
 
         .modal-btns { display: flex; gap: 10px; margin-top: 10px; }
         .btn-modal { flex: 1; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; border: none; transition: 0.3s; font-size: 1rem;}
@@ -93,7 +104,6 @@
         .btn-no { background-color: #333; color: var(--cream); }
         .btn-no:hover { background-color: #555; }
 
-        /* کادر زنگ زدن */
         .ringing-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.95); z-index: 2000;
@@ -108,6 +118,13 @@
         }
         .stop-btn:hover { background: var(--burgundy-dark); }
 
+        /* کادر خطا */
+        .error-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px);
+            z-index: 1000; justify-content: center; align-items: center;
+        }
+
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         @keyframes shake { 0% { transform: rotate(0deg); } 25% { transform: rotate(15deg); } 50% { transform: rotate(-15deg); } 75% { transform: rotate(15deg); } 100% { transform: rotate(0deg); } }
     </style>
@@ -116,7 +133,7 @@
 
 <div class="app-wrapper">
     <nav class="navbar">
-        <a href="home.html" class="nav-btn"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="index.html" class="nav-btn"><i class="fa-solid fa-house"></i> Home</a>
         <a href="notes.html" class="nav-btn"><i class="fa-solid fa-book-open"></i> Notes</a>
         <a href="tasks.html" class="nav-btn"><i class="fa-solid fa-list-check"></i> Tasks</a>
         <a href="timer.html" class="nav-btn"><i class="fa-solid fa-clock"></i> Timer</a>
@@ -132,22 +149,28 @@
 <div class="modal-overlay" id="addAlarmModal">
     <div class="modal-box">
         <h3>Set New Alarm</h3>
+        
         <input type="text" id="alarmTitleInput" class="modal-input" placeholder="Alarm Title (e.g., Study Math)">
         
-        <div style="display:flex; justify-content:center; gap:10px; margin-bottom:15px;">
-            <input type="number" id="alarmHourInput" class="modal-input" placeholder="HH" min="0" max="23" style="width:80px; margin:0;">
-            <span style="font-size:1.5rem; color:var(--cream);">:</span>
-            <input type="number" id="alarmMinuteInput" class="modal-input" placeholder="MM" min="0" max="59" style="width:80px; margin:0;">
+        <!-- انتخاب زمان -->
+        <div class="time-selector">
+            <select id="alarmHourSelect"></select>
+            <span style="font-size: 1.5rem;">:</span>
+            <select id="alarmMinuteSelect"></select>
         </div>
 
-        <div class="days-container" id="daysContainer">
-            <div class="day-btn" data-day="0" onclick="toggleDay(this)">Su</div>
-            <div class="day-btn" data-day="1" onclick="toggleDay(this)">Mo</div>
-            <div class="day-btn" data-day="2" onclick="toggleDay(this)">Tu</div>
-            <div class="day-btn" data-day="3" onclick="toggleDay(this)">We</div>
-            <div class="day-btn" data-day="4" onclick="toggleDay(this)">Th</div>
-            <div class="day-btn" data-day="5" onclick="toggleDay(this)">Fr</div>
-            <div class="day-btn" data-day="6" onclick="toggleDay(this)">Sa</div>
+        <!-- انتخاب روزها -->
+        <div class="days-container">
+            <label class="day-option"><input type="checkbox" id="day-today" value="today"> Today Only</label>
+            <label class="day-option"><input type="checkbox" id="day-all" value="all"> Every Day</label>
+            <hr style="border-color: #333; margin: 5px 0;">
+            <label class="day-option"><input type="checkbox" class="day-check" value="0"> Sunday</label>
+            <label class="day-option"><input type="checkbox" class="day-check" value="1"> Monday</label>
+            <label class="day-option"><input type="checkbox" class="day-check" value="2"> Tuesday</label>
+            <label class="day-option"><input type="checkbox" class="day-check" value="3"> Wednesday</label>
+            <label class="day-option"><input type="checkbox" class="day-check" value="4"> Thursday</label>
+            <label class="day-option"><input type="checkbox" class="day-check" value="5"> Friday</label>
+            <label class="day-option"><input type="checkbox" class="day-check" value="6"> Saturday</label>
         </div>
 
         <div class="modal-btns">
@@ -157,7 +180,7 @@
     </div>
 </div>
 
-<!-- کادر زنگ زدن آلارم -->
+<!-- کادر زنگ زدن -->
 <div class="ringing-modal" id="ringingModal">
     <i class="fa-solid fa-bell ringing-icon"></i>
     <h2 class="ringing-title" id="ringingTitle">Alarm!</h2>
@@ -165,7 +188,7 @@
 </div>
 
 <!-- کادر خطا -->
-<div class="modal-overlay" id="errorModal">
+<div class="error-modal" id="errorModal">
     <div class="modal-box">
         <h3 style="color: var(--burgundy-light);">Oops!</h3>
         <p id="errorText" style="color: var(--beige); margin-bottom: 20px;"></p>
@@ -175,9 +198,7 @@
 
 <script>
     let alarms = JSON.parse(localStorage.getItem('friendAlarms')) || [];
-    let selectedDays = [];
     let ringingInterval = null;
-    let currentRingingAlarm = null;
 
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     
@@ -185,17 +206,13 @@
         if (audioCtx.state === 'suspended') audioCtx.resume();
         const oscillator = audioCtx.createOscillator();
         const gainNode = audioCtx.createGain();
-        
         oscillator.type = 'sine';
         oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
-        
         gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
         gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.05);
         gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
-        
         oscillator.connect(gainNode);
         gainNode.connect(audioCtx.destination);
-        
         oscillator.start();
         oscillator.stop(audioCtx.currentTime + 1.5);
     }
@@ -204,34 +221,57 @@
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
     function showError(msg) { document.getElementById('errorText').innerText = msg; openModal('errorModal'); }
 
-    function openAddAlarmModal() {
-        selectedDays = [];
-        document.querySelectorAll('.day-btn').forEach(btn => btn.classList.remove('active'));
-        document.getElementById('alarmTitleInput').value = '';
-        document.getElementById('alarmHourInput').value = '';
-        document.getElementById('alarmMinuteInput').value = '';
-        openModal('addAlarmModal');
+    // پر کردن لیست ساعت و دقیقه
+    function populateTimeSelectors() {
+        const hourSelect = document.getElementById('alarmHourSelect');
+        const minuteSelect = document.getElementById('alarmMinuteSelect');
+        hourSelect.innerHTML = '';
+        minuteSelect.innerHTML = '';
+
+        for (let i = 0; i < 24; i++) {
+            const option = document.createElement('option');
+            option.value = i.toString().padStart(2, '0');
+            option.text = i.toString().padStart(2, '0');
+            hourSelect.appendChild(option);
+        }
+        for (let i = 0; i < 60; i++) {
+            const option = document.createElement('option');
+            option.value = i.toString().padStart(2, '0');
+            option.text = i.toString().padStart(2, '0');
+            minuteSelect.appendChild(option);
+        }
     }
 
-    function toggleDay(el) {
-        const day = parseInt(el.getAttribute('data-day'));
-        if (selectedDays.includes(day)) {
-            selectedDays = selectedDays.filter(d => d !== day);
-            el.classList.remove('active');
-        } else {
-            selectedDays.push(day);
-            el.classList.add('active');
-        }
+    function openAddAlarmModal() {
+        populateTimeSelectors();
+        document.getElementById('alarmTitleInput').value = '';
+        document.querySelectorAll('.day-check').forEach(chk => chk.checked = false);
+        document.getElementById('day-today').checked = false;
+        document.getElementById('day-all').checked = false;
+        openModal('addAlarmModal');
     }
 
     function saveAlarm() {
         const title = document.getElementById('alarmTitleInput').value.trim();
-        const hour = parseInt(document.getElementById('alarmHourInput').value);
-        const minute = parseInt(document.getElementById('alarmMinuteInput').value);
+        const hour = parseInt(document.getElementById('alarmHourSelect').value);
+        const minute = parseInt(document.getElementById('alarmMinuteSelect').value);
+
+        // گرفتن روزهای انتخاب شده
+        let selectedDays = [];
+        const isToday = document.getElementById('day-today').checked;
+        const isAll = document.getElementById('day-all').checked;
+
+        if (isAll) {
+            selectedDays = [0, 1, 2, 3, 4, 5, 6];
+        } else if (isToday) {
+            selectedDays = [new Date().getDay()];
+        } else {
+            document.querySelectorAll('.day-check:checked').forEach(chk => {
+                selectedDays.push(parseInt(chk.value));
+            });
+        }
 
         if (!title) return showError("Please enter an alarm title!");
-        if (isNaN(hour) || hour < 0 || hour > 23) return showError("Please enter a valid hour (0-23)!");
-        if (isNaN(minute) || minute < 0 || minute > 59) return showError("Please enter a valid minute (0-59)!");
         if (selectedDays.length === 0) return showError("Please select at least one day!");
 
         const newAlarm = {
@@ -239,7 +279,7 @@
             title: title,
             hour: hour,
             minute: minute,
-            days: [...selectedDays],
+            days: selectedDays,
             isActive: true
         };
 
@@ -249,9 +289,7 @@
         closeModal('addAlarmModal');
     }
 
-    function saveData() {
-        localStorage.setItem('friendAlarms', JSON.stringify(alarms));
-    }
+    function saveData() { localStorage.setItem('friendAlarms', JSON.stringify(alarms)); }
 
     function renderAlarms() {
         const list = document.getElementById('alarmsList');
@@ -262,7 +300,10 @@
             const minuteStr = alarm.minute.toString().padStart(2, '0');
             
             const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            const daysStr = alarm.days.map(d => dayNames[d]).join(', ');
+            let daysStr = "";
+            if (alarm.days.length === 7) daysStr = "Every Day";
+            else if (alarm.days.length === 1 && alarm.days[0] === new Date().getDay()) daysStr = "Today";
+            else daysStr = alarm.days.map(d => dayNames[d]).join(', ');
 
             const card = document.createElement('div');
             card.className = 'alarm-card';
@@ -284,7 +325,6 @@
         renderAlarms();
     }
 
-    // چک کردن زمان برای زنگ زدن
     setInterval(() => {
         const now = new Date();
         const currentHour = now.getHours();
@@ -292,43 +332,29 @@
         const currentDay = now.getDay();
         const currentSecond = now.getSeconds();
 
-        // فقط در ثانیه صفر چک کن که دوبار زنگ نزنه
         if (currentSecond !== 0) return; 
 
         alarms.forEach(alarm => {
-            if (alarm.isActive && 
-                alarm.hour === currentHour && 
-                alarm.minute === currentMinute && 
-                alarm.days.includes(currentDay)) {
-                
+            if (alarm.isActive && alarm.hour === currentHour && alarm.minute === currentMinute && alarm.days.includes(currentDay)) {
                 triggerAlarm(alarm);
             }
         });
     }, 1000);
 
     function triggerAlarm(alarm) {
-        currentRingingAlarm = alarm;
         document.getElementById('ringingTitle').innerText = alarm.title;
         document.getElementById('ringingModal').style.display = 'flex';
-        
         playDing();
-        ringingInterval = setInterval(playDing, 2000); // هر ۲ ثانیه یه بار صدا بده
+        ringingInterval = setInterval(playDing, 2000);
     }
 
     function stopAlarm() {
         clearInterval(ringingInterval);
         document.getElementById('ringingModal').style.display = 'none';
-        
-        // اگه می‌خوای آلارم بعد از یه بار زنگ زدن غیرفعال بشه، خط زیر رو فعال کن:
-        // if (currentRingingAlarm) {
-        //     currentRingingAlarm.isActive = false;
-        //     saveData();
-        // }
-        currentRingingAlarm = null;
     }
 
     renderAlarms();
 </script>
 
 </body>
-              </html>
+    </html>
