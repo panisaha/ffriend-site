@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,14 +9,24 @@
     <style>
         :root {
             --bg-main: #050505; --bg-card: #111111; --burgundy-dark: #2a050a;
-            --burgundy-light: #5c0e1b; --cream: #e8e0d0; --beige: #a89b8c; --hanai: #7a3e28;
+            --burgundy-light: #5c0e1b; --cream: #e8e0d0; --beige: #a89b8c;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-main); color: var(--cream); display: flex; justify-content: center; min-height: 100vh; padding: 20px; }
+        
+        /* این خط تنظیمات جهت خودکار رو داره */
+        body { 
+            background-color: var(--bg-main); 
+            color: var(--cream); 
+            display: flex; 
+            justify-content: center; 
+            min-height: 100vh; 
+            padding: 20px; 
+            unicode-bidi: plaintext;
+            text-align: start;
+        }
         
         .app-wrapper { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 20px; }
 
-        /* Navbar */
         .navbar { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; }
         .nav-btn {
             background-color: var(--bg-card); color: var(--beige); text-decoration: none;
@@ -27,7 +37,6 @@
         .nav-btn:hover { background-color: var(--burgundy-dark); color: var(--cream); transform: translateY(-2px); }
         .nav-btn.active { background-color: var(--burgundy-light); color: var(--cream); border-color: var(--cream); box-shadow: 0 0 15px rgba(92, 14, 27, 0.6); }
 
-        /* Support Form Container */
         .support-container {
             background-color: var(--bg-card); border: 1px solid var(--burgundy-dark);
             border-radius: 15px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
@@ -43,7 +52,6 @@
             width: 100%; padding: 14px 18px; background-color: #0a0a0a; 
             border: 1px solid #222; border-radius: 10px; color: var(--cream); 
             outline: none; font-size: 1rem; transition: all 0.3s ease;
-            font-family: inherit;
         }
         .form-control:focus { border-color: var(--burgundy-light); background-color: #111; box-shadow: 0 0 15px rgba(92, 14, 27, 0.3); }
         textarea.form-control { resize: vertical; min-height: 120px; }
@@ -57,7 +65,6 @@
         }
         .btn-send:hover { background-color: var(--burgundy-dark); transform: scale(1.02); }
         
-        /* Success Message Style */
         .success-msg {
             color: var(--cream); font-size: 1.2rem; font-weight: bold; 
             display: flex; flex-direction: column; align-items: center; gap: 15px;
@@ -69,7 +76,6 @@
 <body>
 
 <div class="app-wrapper">
-    <!-- Navigation Bar -->
     <nav class="navbar">
         <a href="index.html" class="nav-btn"><i class="fa-solid fa-house"></i> Home</a>
         <a href="notes.html" class="nav-btn"><i class="fa-solid fa-book-open"></i> Notes</a>
@@ -80,13 +86,11 @@
         <a href="support.html" class="nav-btn active"><i class="fa-solid fa-headset"></i> Support</a>
     </nav>
 
-    <!-- Support Form -->
     <div class="support-container">
         <h2>Contact Support</h2>
         <p>Have a question, suggestion, or found a bug? Drop a message below and it will be sent directly to me!</p>
 
         <form id="supportForm" action="https://formspree.io/f/mgaaqgnz" method="POST">
-            
             <div class="form-group">
                 <label for="name">Your Name</label>
                 <input type="text" id="name" name="name" class="form-control" placeholder="Enter your name..." required>
@@ -113,12 +117,11 @@
     const form = document.getElementById('supportForm');
     
     form.addEventListener('submit', function(e) {
-        e.preventDefault(); // جلوگیری از رفتن به صفحه سفید Formspree
+        e.preventDefault(); 
         
         const formData = new FormData(form);
         const submitBtn = form.querySelector('button[type="submit"]');
         
-        // تغییر متن دکمه موقع ارسال
         submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
         submitBtn.disabled = true;
 
@@ -128,7 +131,6 @@
             headers: { 'Accept': 'application/json' }
         }).then(response => {
             if (response.ok) {
-                // نمایش پیام موفقیت به جای فرم
                 form.innerHTML = `
                     <div class="success-msg">
                         <i class="fa-solid fa-circle-check"></i>
