@@ -16,7 +16,7 @@
         
         .app-wrapper { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 20px; }
 
-        /* Navbar (copied from other pages) */
+        /* Navbar */
         .navbar { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; }
         .nav-btn {
             background-color: var(--bg-card); color: var(--beige); text-decoration: none;
@@ -56,6 +56,14 @@
             display: flex; justify-content: center; align-items: center; gap: 10px;
         }
         .btn-send:hover { background-color: var(--burgundy-dark); transform: scale(1.02); }
+        
+        /* Success Message Style */
+        .success-msg {
+            color: var(--cream); font-size: 1.2rem; font-weight: bold; 
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
+            padding: 20px;
+        }
+        .success-msg i { color: #28a745; font-size: 3rem; }
     </style>
 </head>
 <body>
@@ -77,8 +85,7 @@
         <h2>Contact Support</h2>
         <p>Have a question, suggestion, or found a bug? Drop a message below and it will be sent directly to me!</p>
 
-        <!-- Action points to your specific Formspree ID -->
-        <form action="https://formspree.io/f/mgaaqgnz" method="POST">
+        <form id="supportForm" action="https://formspree.io/f/mgaaqgnz" method="POST">
             
             <div class="form-group">
                 <label for="name">Your Name</label>
@@ -101,6 +108,45 @@
         </form>
     </div>
 </div>
+
+<script>
+    const form = document.getElementById('supportForm');
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault(); // جلوگیری از رفتن به صفحه سفید Formspree
+        
+        const formData = new FormData(form);
+        const submitBtn = form.querySelector('button[type="submit"]');
+        
+        // تغییر متن دکمه موقع ارسال
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+        submitBtn.disabled = true;
+
+        fetch(form.action, {
+            method: form.method,
+            body: formData,
+            headers: { 'Accept': 'application/json' }
+        }).then(response => {
+            if (response.ok) {
+                // نمایش پیام موفقیت به جای فرم
+                form.innerHTML = `
+                    <div class="success-msg">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>Thanks! Your message has been sent successfully.</span>
+                    </div>
+                `;
+            } else {
+                alert("Oops! Something went wrong. Please try again.");
+                submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
+                submitBtn.disabled = false;
+            }
+        }).catch(error => {
+            alert("Oops! Something went wrong. Please check your connection.");
+            submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
+            submitBtn.disabled = false;
+        });
+    });
+</script>
 
 </body>
 </html>
