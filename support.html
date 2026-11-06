@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +16,7 @@
         
         .app-wrapper { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 20px; }
 
-        /* نوار منو (کپی شده از بقیه صفحات) */
+        /* Navbar (copied from other pages) */
         .navbar { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; }
         .nav-btn {
             background-color: var(--bg-card); color: var(--beige); text-decoration: none;
@@ -27,7 +27,7 @@
         .nav-btn:hover { background-color: var(--burgundy-dark); color: var(--cream); transform: translateY(-2px); }
         .nav-btn.active { background-color: var(--burgundy-light); color: var(--cream); border-color: var(--cream); box-shadow: 0 0 15px rgba(92, 14, 27, 0.6); }
 
-        /* استایل کادر پشتیبانی */
+        /* Support Form Container */
         .support-container {
             background-color: var(--bg-card); border: 1px solid var(--burgundy-dark);
             border-radius: 15px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
@@ -61,7 +61,7 @@
 <body>
 
 <div class="app-wrapper">
-    <!-- منوی سایت -->
+    <!-- Navigation Bar -->
     <nav class="navbar">
         <a href="index.html" class="nav-btn"><i class="fa-solid fa-house"></i> Home</a>
         <a href="notes.html" class="nav-btn"><i class="fa-solid fa-book-open"></i> Notes</a>
@@ -69,40 +69,38 @@
         <a href="timer.html" class="nav-btn"><i class="fa-solid fa-clock"></i> Timer</a>
         <a href="links.html" class="nav-btn"><i class="fa-solid fa-link"></i> Links</a>
         <a href="alarm.html" class="nav-btn"><i class="fa-solid fa-bell"></i> Alarm</a>
-        <a href="support.html" class="nav-btn"><i class="fa-solid fa-headset"></i> Support</a>
-        <!-- تب پشتیبانی که فعاله -->
         <a href="support.html" class="nav-btn active"><i class="fa-solid fa-headset"></i> Support</a>
     </nav>
 
-    <!-- کادر پشتیبانی -->
+    <!-- Support Form -->
     <div class="support-container">
-        <h2>پشتیبانی و ارتباط</h2>
-        <p>هر سوال، پیشنهاد یا انتقادی داری، همین‌جا برام بنویس. پیامت مستقیم به دستم می‌رسه!</p>
+        <h2>Contact Support</h2>
+        <p>Have a question, suggestion, or found a bug? Drop a message below and it will be sent directly to me!</p>
 
-        <!-- این فرم رو باید به یه سرویس مثل Formspree وصل کنی (توضیحات پایین) -->
-        <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <!-- Action points to your specific Formspree ID -->
+        <form action="https://formspree.io/f/mgaaqgnz" method="POST">
             
             <div class="form-group">
-                <label for="name">اسم تو</label>
-                <input type="text" id="name" name="name" class="form-control" placeholder="اسمت رو بنویس..." required>
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" class="form-control" placeholder="Enter your name..." required>
             </div>
 
             <div class="form-group">
-                <label for="email">ایمیل تو (برای پاسخ دادن)</label>
+                <label for="email">Your Email</label>
                 <input type="email" id="email" name="email" class="form-control" placeholder="example@email.com" required>
             </div>
 
             <div class="form-group">
-                <label for="message">پیامت</label>
-                <textarea id="message" name="message" class="form-control" placeholder="چی می‌خوای بگی؟" required></textarea>
+                <label for="message">Message</label>
+                <textarea id="message" name="message" class="form-control" placeholder="What would you like to tell me?" required></textarea>
             </div>
 
             <button type="submit" class="btn-send">
-                <i class="fa-solid fa-paper-plane"></i> ارسال پیام
+                <i class="fa-solid fa-paper-plane"></i> Send Message
             </button>
         </form>
     </div>
 </div>
 
 </body>
-  </html>
+</html>
