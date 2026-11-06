@@ -52,7 +52,6 @@
         .delete-note-btn { color: var(--burgundy-light); background: none; border: none; cursor: pointer; font-size: 1.2rem; transition: 0.3s; }
         .delete-note-btn:hover { color: red; transform: scale(1.2); }
 
-        /* ابزارهای هایلایت */
         .highlighter-tools { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; padding-bottom: 15px; border-bottom: 1px solid var(--burgundy-dark); flex-wrap: wrap;}
         .highlighter-btn { background: #333; color: var(--cream); border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 5px; transition: 0.3s; }
         .highlighter-btn.active { background: var(--burgundy-light); box-shadow: 0 0 10px rgba(92,14,27,0.8); }
@@ -69,17 +68,15 @@
             border: 1px solid var(--burgundy-dark); border-radius: 10px; color: var(--cream);
             font-size: 1.2rem; line-height: 2; outline: none; overflow-y: auto;
             text-align: left; direction: ltr;
+            -webkit-user-select: text; user-select: text;
         }
         .notepad:focus { border-color: var(--burgundy-light); box-shadow: 0 0 10px rgba(92,14,27,0.3); }
 
-        /* وقتی پاک‌کن فعاله، نشانگر ماوس تغییر می‌کنه */
-        .notepad.eraser-mode { cursor: cell; }
+        .notepad.eraser-mode { cursor: cell; -webkit-user-select: none; user-select: none; }
         
-        /* این کلاس به کلماتی که هایلایت میشن داده میشه */
         .word-highlight { border-radius: 4px; padding: 2px 4px; margin: 0 2px; cursor: pointer; transition: 0.2s; }
         .word-highlight:hover { opacity: 0.8; }
 
-        /* کادر پاپ‌آپ */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
         .modal-box { background-color: var(--bg-card); border: 1px solid var(--burgundy-light); padding: 30px; border-radius: 20px; width: 90%; max-width: 350px; box-shadow: 0 20px 50px rgba(0,0,0,0.9); animation: fadeIn 0.3s ease; text-align: center; }
         .modal-box h3 { color: var(--cream); margin-bottom: 15px; }
@@ -131,7 +128,6 @@
                 <div class="color-btn" style="background: #a0522d;" onclick="selectColor('#a0522d', '#fff', this)"></div>
             </div>
 
-            <!-- دکمه پاک‌کن با استایل ساده مشابه ماژیک -->
             <button class="highlighter-btn" id="eraserBtn" onclick="toggleEraser()">
                 <i class="fa-solid fa-eraser"></i> Eraser
             </button>
@@ -233,7 +229,6 @@
         btn.classList.toggle('active');
         if (!colors.classList.contains('show')) { isHighlighterActive = false; }
         
-        // خاموش کردن پاک‌کن وقتی ماژیک باز میشه
         if (colors.classList.contains('show') && isEraserActive) {
             toggleEraser();
         }
@@ -244,7 +239,6 @@
         document.querySelectorAll('.color-btn').forEach(btn => btn.classList.remove('selected'));
         element.classList.add('selected');
 
-        // خاموش کردن پاک‌کن اگه فعال بود
         if (isEraserActive) {
             toggleEraser();
         }
@@ -257,7 +251,6 @@
         const notepad = document.getElementById('notepad');
 
         if (isEraserActive) {
-            // اگه ماژیک فعال بود، خاموشش کن
             isHighlighterActive = false;
             document.getElementById('highlighterBtn').classList.remove('active');
             document.getElementById('colorsContainer').classList.remove('show');
@@ -270,29 +263,49 @@
         }
     }
 
-    // --- منطق هایلایت با انتخاب متن ---
-    document.getElementById('notepad').addEventListener('click', function(e) {
-        if (!isHighlighterActive || isEraserActive) return;
-        
-        const selection = window.getSelection();
-        const selectedText = selection.toString().trim();
+    // --- منطق هایلایت: اصلاح شده برای کل متن انتخاب شده ---
+    const notepadEl = document.getElementById('notepad');
 
-        if (selectedText.length > 0) {
-            const range = selection.getRangeAt(0);
-            const span = document.createElement('span');
-            span.className = 'word-highlight';
-            span.style.backgroundColor = activeColor;
-            span.style.color = activeTextColor;
-            span.innerText = selectedText;
-            
-            range.deleteContents();
-            range.insertNode(span);
-            selection.removeAllRanges();
-            this.dispatchEvent(new Event('input'));
+    function applyHighlight() {
+        if (!isHighlighterActive || isEraserActive) return;
+
+        const selection = window.getSelection();
+        if (selection.rangeCount === 0) return;
+
+        const range = selection.getRangeAt(0);
+        const selectedText = selection.toString().trim();
+        if (selectedText.length === 0) return;
+
+        if (!notepadEl.contains(range.commonAncestorContainer)) return;
+
+        // جلوگیری از هایلایت کردن تگ‌های html (مثل عکس یا لینک)
+        if (range.commonAncestorContainer.nodeType !== 3 && range.commonAncestorContainer.nodeName !== 'DIV') {
+             // اگه انتخاب شامل تگ‌های دیگه هست، ادامه بده
         }
+
+        const span = document.createElement('span');
+        span.className = 'word-highlight';
+        span.style.backgroundColor = activeColor;
+        span.style.color = activeTextColor;
+
+        // این خط کل محتوای انتخاب شده رو برمی‌داره و می‌ذاره داخل اسپن
+        span.appendChild(range.extractContents());
+        
+        range.insertNode(span);
+        selection.removeAllRanges();
+        notepadEl.dispatchEvent(new Event('input'));
+    }
+
+    notepadEl.addEventListener('mouseup', function(e) {
+        setTimeout(applyHighlight, 10);
     });
 
-    // --- منطق پاک‌کن (کشیدن انگشت/ماوس) ---
+    notepadEl.addEventListener('touchend', function(e) {
+        if (isEraserActive) return;
+        setTimeout(applyHighlight, 50); // تاخیر کمی بیشتر برای گوشی
+    });
+
+    // --- منطق پاک‌کن (کشیدن) ---
     let isDrawing = false;
 
     function eraseAtPoint(x, y) {
@@ -301,13 +314,10 @@
             const text = element.innerText;
             const textNode = document.createTextNode(text);
             element.parentNode.replaceChild(textNode, element);
-            document.getElementById('notepad').dispatchEvent(new Event('input'));
+            notepadEl.dispatchEvent(new Event('input'));
         }
     }
 
-    const notepadEl = document.getElementById('notepad');
-
-    // ماوس
     notepadEl.addEventListener('mousedown', function(e) {
         if (isEraserActive) {
             isDrawing = true;
@@ -327,7 +337,6 @@
         isDrawing = false;
     });
 
-    // لمس (موبایل)
     notepadEl.addEventListener('touchstart', function(e) {
         if (isEraserActive) {
             isDrawing = true;
