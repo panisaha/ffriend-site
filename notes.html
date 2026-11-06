@@ -67,8 +67,10 @@
             width: 100%; min-height: 300px; padding: 15px; background-color: #1a1a1a;
             border: 1px solid var(--burgundy-dark); border-radius: 10px; color: var(--cream);
             font-size: 1.2rem; line-height: 2; outline: none; overflow-y: auto;
-            text-align: left; direction: ltr;
             -webkit-user-select: text; user-select: text;
+            /* این دو خط مشکل جهت متن رو حل می‌کنن */
+            unicode-bidi: plaintext; 
+            text-align: start;
         }
         .notepad:focus { border-color: var(--burgundy-light); box-shadow: 0 0 10px rgba(92,14,27,0.3); }
 
@@ -94,7 +96,7 @@
 
 <div class="app-wrapper">
     <nav class="navbar">
-        <a href="home.html" class="nav-btn"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="index.html" class="nav-btn"><i class="fa-solid fa-house"></i> Home</a>
         <a href="notes.html" class="nav-btn active"><i class="fa-solid fa-book-open"></i> Notes</a>
         <a href="tasks.html" class="nav-btn"><i class="fa-solid fa-list-check"></i> Tasks</a>
         <a href="timer.html" class="nav-btn"><i class="fa-solid fa-clock"></i> Timer</a>
@@ -128,7 +130,6 @@
                 <div class="color-btn" style="background: #1a2a3a;" onclick="selectColor('#1a2a3a', '#fff', this)"></div>
                 <div class="color-btn" style="background: #a0522d;" onclick="selectColor('#a0522d', '#fff', this)"></div>
             </div>
-
             <button class="highlighter-btn" id="eraserBtn" onclick="toggleEraser()">
                 <i class="fa-solid fa-eraser"></i> Eraser
             </button>
@@ -264,7 +265,7 @@
         }
     }
 
-    // --- منطق هایلایت: اصلاح شده برای کل متن انتخاب شده ---
+    // --- منطق هایلایت با انتخاب متن ---
     const notepadEl = document.getElementById('notepad');
 
     function applyHighlight() {
@@ -279,19 +280,12 @@
 
         if (!notepadEl.contains(range.commonAncestorContainer)) return;
 
-        // جلوگیری از هایلایت کردن تگ‌های html (مثل عکس یا لینک)
-        if (range.commonAncestorContainer.nodeType !== 3 && range.commonAncestorContainer.nodeName !== 'DIV') {
-             // اگه انتخاب شامل تگ‌های دیگه هست، ادامه بده
-        }
-
         const span = document.createElement('span');
         span.className = 'word-highlight';
         span.style.backgroundColor = activeColor;
         span.style.color = activeTextColor;
 
-        // این خط کل محتوای انتخاب شده رو برمی‌داره و می‌ذاره داخل اسپن
         span.appendChild(range.extractContents());
-        
         range.insertNode(span);
         selection.removeAllRanges();
         notepadEl.dispatchEvent(new Event('input'));
@@ -303,7 +297,7 @@
 
     notepadEl.addEventListener('touchend', function(e) {
         if (isEraserActive) return;
-        setTimeout(applyHighlight, 50); // تاخیر کمی بیشتر برای گوشی
+        setTimeout(applyHighlight, 50);
     });
 
     // --- منطق پاک‌کن (کشیدن) ---
