@@ -71,6 +71,9 @@
             text-align: left; direction: ltr;
         }
         .notepad:focus { border-color: var(--burgundy-light); box-shadow: 0 0 10px rgba(92,14,27,0.3); }
+
+        /* وقتی پاک‌کن فعاله، نشانگر ماوس تغییر می‌کنه */
+        .notepad.eraser-mode { cursor: cell; }
         
         /* این کلاس به کلماتی که هایلایت میشن داده میشه */
         .word-highlight { border-radius: 4px; padding: 2px 4px; margin: 0 2px; cursor: pointer; transition: 0.2s; }
@@ -127,6 +130,11 @@
                 <div class="color-btn" style="background: #1a2a3a;" onclick="selectColor('#1a2a3a', '#fff', this)"></div>
                 <div class="color-btn" style="background: #a0522d;" onclick="selectColor('#a0522d', '#fff', this)"></div>
             </div>
+
+            <!-- دکمه پاک‌کن با استایل ساده مشابه ماژیک -->
+            <button class="highlighter-btn" id="eraserBtn" onclick="toggleEraser()">
+                <i class="fa-solid fa-eraser"></i> Eraser
+            </button>
         </div>
 
         <div class="notepad" id="notepad" contenteditable="true"></div>
@@ -155,6 +163,7 @@
     let notes = JSON.parse(localStorage.getItem('friendNotesList')) || [];
     let currentNoteId = null;
     let isHighlighterActive = false;
+    let isEraserActive = false;
     let activeColor = '#e6d5a8';
     let activeTextColor = '#000';
 
@@ -216,30 +225,59 @@
         if (note) { note.content = this.innerHTML; saveData(); renderNotes(); }
     });
 
-    // --- سیستم ماژیک (برای گوشی) ---
+    // --- سیستم ماژیک ---
     function toggleColors() {
         const colors = document.getElementById('colorsContainer');
         const btn = document.getElementById('highlighterBtn');
         colors.classList.toggle('show');
         btn.classList.toggle('active');
         if (!colors.classList.contains('show')) { isHighlighterActive = false; }
+        
+        // خاموش کردن پاک‌کن وقتی ماژیک باز میشه
+        if (colors.classList.contains('show') && isEraserActive) {
+            toggleEraser();
+        }
     }
 
     function selectColor(bg, fg, element) {
         activeColor = bg; activeTextColor = fg; isHighlighterActive = true;
         document.querySelectorAll('.color-btn').forEach(btn => btn.classList.remove('selected'));
         element.classList.add('selected');
+
+        // خاموش کردن پاک‌کن اگه فعال بود
+        if (isEraserActive) {
+            toggleEraser();
+        }
     }
 
-    // وقتی روی کلمه کلیک می‌کنه
+    // --- سیستم پاک‌کن ---
+    function toggleEraser() {
+        isEraserActive = !isEraserActive;
+        const eraserBtn = document.getElementById('eraserBtn');
+        const notepad = document.getElementById('notepad');
+
+        if (isEraserActive) {
+            // اگه ماژیک فعال بود، خاموشش کن
+            isHighlighterActive = false;
+            document.getElementById('highlighterBtn').classList.remove('active');
+            document.getElementById('colorsContainer').classList.remove('show');
+
+            eraserBtn.classList.add('active');
+            notepad.classList.add('eraser-mode');
+        } else {
+            eraserBtn.classList.remove('active');
+            notepad.classList.remove('eraser-mode');
+        }
+    }
+
+    // --- منطق هایلایت با انتخاب متن ---
     document.getElementById('notepad').addEventListener('click', function(e) {
-        if (!isHighlighterActive) return;
+        if (!isHighlighterActive || isEraserActive) return;
         
         const selection = window.getSelection();
         const selectedText = selection.toString().trim();
 
         if (selectedText.length > 0) {
-            // اگه یه کلمه یا جمله رو انتخاب کرد
             const range = selection.getRangeAt(0);
             const span = document.createElement('span');
             span.className = 'word-highlight';
@@ -247,18 +285,68 @@
             span.style.color = activeTextColor;
             span.innerText = selectedText;
             
-            // پاک کردن متن قبلی و گذاشتن متن هایلایت شده
             range.deleteContents();
             range.insertNode(span);
             selection.removeAllRanges();
             this.dispatchEvent(new Event('input'));
-        } else if (e.target.classList.contains('word-highlight')) {
-            // اگه روی یه کلمه هایلایت شده کلیک کرد، هایلایتش رو پاک کن
-            const text = e.target.innerText;
-            const textNode = document.createTextNode(text);
-            e.target.parentNode.replaceChild(textNode, e.target);
-            this.dispatchEvent(new Event('input'));
         }
+    });
+
+    // --- منطق پاک‌کن (کشیدن انگشت/ماوس) ---
+    let isDrawing = false;
+
+    function eraseAtPoint(x, y) {
+        const element = document.elementFromPoint(x, y);
+        if (element && element.classList.contains('word-highlight')) {
+            const text = element.innerText;
+            const textNode = document.createTextNode(text);
+            element.parentNode.replaceChild(textNode, element);
+            document.getElementById('notepad').dispatchEvent(new Event('input'));
+        }
+    }
+
+    const notepadEl = document.getElementById('notepad');
+
+    // ماوس
+    notepadEl.addEventListener('mousedown', function(e) {
+        if (isEraserActive) {
+            isDrawing = true;
+            eraseAtPoint(e.clientX, e.clientY);
+            e.preventDefault();
+        }
+    });
+
+    notepadEl.addEventListener('mousemove', function(e) {
+        if (isDrawing && isEraserActive) {
+            eraseAtPoint(e.clientX, e.clientY);
+            e.preventDefault();
+        }
+    });
+
+    document.addEventListener('mouseup', function() {
+        isDrawing = false;
+    });
+
+    // لمس (موبایل)
+    notepadEl.addEventListener('touchstart', function(e) {
+        if (isEraserActive) {
+            isDrawing = true;
+            const touch = e.touches[0];
+            eraseAtPoint(touch.clientX, touch.clientY);
+            e.preventDefault();
+        }
+    }, { passive: false });
+
+    notepadEl.addEventListener('touchmove', function(e) {
+        if (isDrawing && isEraserActive) {
+            const touch = e.touches[0];
+            eraseAtPoint(touch.clientX, touch.clientY);
+            e.preventDefault();
+        }
+    }, { passive: false });
+
+    document.addEventListener('touchend', function() {
+        isDrawing = false;
     });
 
     renderNotes();
