@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +12,7 @@
             --burgundy-light: #5c0e1b; --cream: #e8e0d0; --beige: #a89b8c; --hanai: #7a3e28;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-main); color: var(--cream); display: flex; justify-content: center; min-height: 100vh; padding: 20px; }
+        body { background-color: var(--bg-main); color: var(--cream); display: flex; justify-content: center; min-height: 100vh; padding: 20px; unicode-bidi: plaintext; text-align: start; }
         
         .app-wrapper { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 20px; }
 
@@ -42,7 +42,7 @@
             background-color: var(--bg-card); border: 1px solid var(--burgundy-dark);
             padding: 20px; border-radius: 15px; display: flex;
             justify-content: space-between; align-items: center;
-            transition: 0.3s; border-right: 5px solid var(--hanai);
+            transition: 0.3s; border-left: 5px solid var(--hanai);
         }
         .alarm-card:hover { background-color: #1a1a1a; }
         
@@ -69,29 +69,28 @@
         .modal-input {
             width: 100%; padding: 12px; margin-bottom: 15px; background-color: #0a0a0a;
             border: 1px solid #222; border-radius: 10px; color: var(--cream); outline: none;
-            text-align: center; font-size: 1.1rem;
+            text-align: right; font-size: 1.1rem;
         }
         .modal-input:focus { border-color: var(--burgundy-light); }
 
         /* --- اسکرول پیکر (مثل گوشی) --- */
         .time-picker-container {
             display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 20px;
-            position: relative;
+            position: relative; direction: ltr;
         }
         .picker-column {
             height: 150px; width: 70px; overflow-y: scroll; scroll-snap-type: y mandatory;
-            scrollbar-width: none; /* مخفی کردن اسکرول‌بار در فایرفاکس */
+            scrollbar-width: none; 
             background: #0a0a0a; border-radius: 10px; border: 1px solid #222;
             position: relative;
         }
-        .picker-column::-webkit-scrollbar { display: none; } /* مخفی کردن اسکرول‌بار در کروم */
+        .picker-column::-webkit-scrollbar { display: none; }
         
         .picker-item {
             height: 50px; display: flex; justify-content: center; align-items: center;
             scroll-snap-align: center; font-size: 1.5rem; color: var(--beige); transition: 0.2s;
         }
         
-        /* خط وسط که عدد انتخاب شده رو نشون میده */
         .picker-highlight {
             position: absolute; top: 50px; left: 0; width: 100%; height: 50px;
             background: rgba(92, 14, 27, 0.4); border-top: 1px solid var(--burgundy-light); border-bottom: 1px solid var(--burgundy-light);
@@ -181,6 +180,15 @@
     </div>
 </div>
 
+<!-- کادر خطای جدید -->
+<div class="modal-overlay" id="errorModal">
+    <div class="modal-box">
+        <h3 style="color: var(--burgundy-light);">Oops!</h3>
+        <p id="errorText" style="color: var(--beige); margin-bottom: 20px;"></p>
+        <button class="btn-modal btn-no" style="width: 100%;" onclick="closeModal('errorModal')">OK</button>
+    </div>
+</div>
+
 <!-- کادر زنگ زدن -->
 <div class="ringing-modal" id="ringingModal">
     <i class="fa-solid fa-bell ringing-icon"></i>
@@ -212,12 +220,10 @@
         oscillator.stop(audioCtx.currentTime + 1.5);
     }
 
-    // ساخت اسکرول پیکر (مثل گوشی)
     function setupPicker(containerId, maxVal) {
         const container = document.getElementById(containerId);
         container.innerHTML = '';
         
-        // اضافه کردن فاصله بالا و پایین برای اینکه عدد وسط قرار بگیره
         const emptyTop = document.createElement('div');
         emptyTop.style.height = '50px';
         container.appendChild(emptyTop);
@@ -234,7 +240,6 @@
         emptyBottom.style.height = '50px';
         container.appendChild(emptyBottom);
 
-        // وقتی اسکرول کرد، عددی که وسط قرار می‌گیره رو پیدا کن
         container.addEventListener('scroll', () => {
             clearTimeout(container.settleTimeout);
             container.settleTimeout = setTimeout(() => {
@@ -247,28 +252,30 @@
                 
                 if (containerId === 'hourPicker') currentHour = index;
                 if (containerId === 'minutePicker') currentMinute = index;
-            }, 100); // 100 میلی‌ثانیه صبر میکنه تا اسکرول تموم بشه
+            }, 100); 
         });
     }
 
     function openModal(id) { document.getElementById(id).style.display = 'flex'; }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
+    function showError(msg) {
+        document.getElementById('errorText').innerText = msg;
+        openModal('errorModal');
+    }
+
     function openAddAlarmModal() {
         selectedDays = [];
         document.querySelectorAll('.day-btn').forEach(btn => btn.classList.remove('active'));
         document.getElementById('alarmTitleInput').value = '';
         
-        // تنظیم اسکرول پیکر
         setupPicker('hourPicker', 24);
         setupPicker('minutePicker', 60);
         
-        // تنظیم زمان فعلی به عنوان پیش‌فرض
         const now = new Date();
         currentHour = now.getHours();
         currentMinute = now.getMinutes();
         
-        // اسکرول رو دقیقاً ببر روی زمان فعلی
         setTimeout(() => {
             document.getElementById('hourPicker').scrollTop = currentHour * 50;
             document.getElementById('minutePicker').scrollTop = currentMinute * 50;
@@ -290,8 +297,8 @@
 
     function saveAlarm() {
         const title = document.getElementById('alarmTitleInput').value.trim();
-        if (!title) return alert("Please enter an alarm title!");
-        if (selectedDays.length === 0) return alert("Please select at least one day!");
+        if (!title) { showError("Please enter an alarm title!"); return; }
+        if (selectedDays.length === 0) { showError("Please select at least one day!"); return; }
 
         const newAlarm = {
             id: Date.now().toString(),
