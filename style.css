@@ -20,7 +20,7 @@ div[class*="card"], div[class*="box"], div[class*="container"], main, section, f
     -webkit-backdrop-filter: blur(10px) !important; 
     border: 1px solid rgba(139, 0, 0, 0.3) !important; 
     border-radius: 15px;
-    box-shadow: 0 0 10px rgba(255, 0, 0, 0.4), 0 0 20px rgba(139, 0, 0, 0.2) !important; 
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.2), 0 0 20px rgba(139, 0, 0, 0.2) !important; 
     transition: all 0.3s ease;
 }
 
@@ -33,7 +33,7 @@ button, a[href], input[type="submit"], .btn, [class*="btn"] {
 }
 
 button:hover, a[href]:hover, input[type="submit"]:hover, .btn:hover, [class*="btn"]:hover {
-    box-shadow: 0 0 15px rgba(255, 0, 0, 0.6), 0 0 30px rgba(139, 0, 0, 0.4) !important; 
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.15), 0 0 20px rgba(139, 0, 0, 0.1) !important; 
     border-color: #ff3333 !important; 
     transform: translateY(-2px) scale(1.02);
 }
