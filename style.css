@@ -1,43 +1,42 @@
 /* ==========================================
-   ۱. تنظیمات کلی و اسکرول‌بار تیره
+   ۱. تنظیمات کلی
    ========================================== */
 body {
     background-color: #0a0a0a !important; 
     color: #f0e6d2 !important; 
 }
 
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: #0a0a0a; }
-::-webkit-scrollbar-thumb { background: #8b0000; border-radius: 4px; }
-
 /* ==========================================
-   ۲. افکت شیشه‌ای برای کادرهای اصلی (زورکی!)
+   ۲. کادرهای شیشه‌ای (با تم زرشکی تیره)
    ========================================== */
-/* این کد به همه divهای اصلی و کانتینرها افکت میده */
-div[class*="card"], div[class*="box"], div[class*="container"], main, section, form {
+div[class*="card"], div[class*="box"], div[class*="container"], form, section {
     background: rgba(30, 0, 0, 0.4) !important; 
-    backdrop-filter: blur(10px) !important; 
-    -webkit-backdrop-filter: blur(10px) !important; 
-    border: 1px solid rgba(139, 0, 0, 0.3) !important; 
+    backdrop-filter: blur(12px) !important; 
+    -webkit-backdrop-filter: blur(12px) !important; 
+    border: 1px solid rgba(139, 0, 0, 0.3) !important; /* حاشیه زرشکی */
     border-radius: 15px;
-    box-shadow: 0 0 10px rgba(255, 0, 0, 0.2), 0 0 20px rgba(139, 0, 0, 0.2) !important; 
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8) !important; /* سایه مشکی */
     transition: all 0.3s ease;
 }
 
 /* ==========================================
-   ۳. افکت درخشش زرشکی برای تمام دکمه‌ها و لینک‌ها (زورکی!)
+   ۳. دکمه‌ها با درخشش زرشکیِ تیره (بدون قرمز روشن)
    ========================================== */
-button, a[href], input[type="submit"], .btn, [class*="btn"] {
+button, a[href], input[type="submit"] {
     transition: all 0.3s ease-in-out !important;
     border-radius: 8px;
 }
 
-button:hover, a[href]:hover, input[type="submit"]:hover, .btn:hover, [class*="btn"]:hover {
-    box-shadow: 0 0 12px rgba(255, 0, 0, 0.5), 0 0 25px rgba(139, 0, 0, 0.3) !important;  
-    border-color: #ff3333 !important; 
-    transform: translateY(-2px) scale(1.02);
+button:hover, a[href]:hover, input[type="submit"]:hover {
+    /* درخشش با رنگ زرشکی تیره (139, 0, 0) و شفافیت ملایم */
+    box-shadow: 0 0 12px rgba(139, 0, 0, 0.6) !important; 
+    border-color: #8b0000 !important; /* حاشیه زرشکی پررنگ */
+    transform: translateY(-2px);
 }
 
-button:active, a[href]:active {
-    transform: translateY(1px) scale(0.98);
-}
+/* ==========================================
+   ۴. اسکرول‌بار
+   ========================================== */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0a0a0a; }
+::-webkit-scrollbar-thumb { background: #8b0000; border-radius: 4px; }
