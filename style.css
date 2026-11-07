@@ -7,30 +7,34 @@ body {
 }
 
 /* ==========================================
-   ۲. کادرهای شیشه‌ای (با تم زرشکی تیره)
+   ۲. کادرهای شیشه‌ای (تیره و لوکس)
    ========================================== */
 div[class*="card"], div[class*="box"], div[class*="container"], form, section {
     background: rgba(30, 0, 0, 0.4) !important; 
     backdrop-filter: blur(12px) !important; 
     -webkit-backdrop-filter: blur(12px) !important; 
-    border: 1px solid rgba(139, 0, 0, 0.3) !important; /* حاشیه زرشکی */
+    border: 1px solid rgba(139, 0, 0, 0.3) !important; 
     border-radius: 15px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8) !important; /* سایه مشکی */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8) !important; 
     transition: all 0.3s ease;
 }
 
 /* ==========================================
-   ۳. دکمه‌ها با درخشش زرشکیِ تیره (بدون قرمز روشن)
+   ۳. دکمه‌ها (تغییر رنگ به زرشکی تیره + درخشش ملایم)
    ========================================== */
-button, a[href], input[type="submit"] {
+button, a[href], input[type="submit"], .nav-btn {
     transition: all 0.3s ease-in-out !important;
     border-radius: 8px;
+    /* این خط رنگ دکمه‌های قرمز تو رو به زرشکی تیره تبدیل می‌کنه */
+    background-color: rgba(92, 14, 27, 0.8) !important; 
+    color: #f0e6d2 !important;
+    border: 1px solid #5c0e1b !important;
 }
 
-button:hover, a[href]:hover, input[type="submit"]:hover {
-    /* درخشش با رنگ زرشکی تیره (139, 0, 0) و شفافیت ملایم */
-    box-shadow: 0 0 12px rgba(139, 0, 0, 0.6) !important; 
-    border-color: #8b0000 !important; /* حاشیه زرشکی پررنگ */
+button:hover, a[href]:hover, input[type="submit"]:hover, .nav-btn:hover {
+    /* درخشش زرشکیِ ملایم ولی قابل دیدن */
+    box-shadow: 0 0 15px rgba(139, 0, 0, 0.8) !important; 
+    border-color: #8b0000 !important; 
     transform: translateY(-2px);
 }
 
