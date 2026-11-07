@@ -1,11 +1,12 @@
 {
-  "name": "My Study Planner",
-  "short_name": "Planner",
+  "name": "MyPlanner",
+  "short_name": "MyPlanner",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#050505",
   "theme_color": "#5c0e1b",
-  "description": "A personal study planner with notes, tasks, timer, and links.",
+  "description": "A personal study planner to manage tasks, notes, timer, and alarms.",
   "icons": [
     {
       "src": "icon-192x192.png",
