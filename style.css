@@ -20,7 +20,7 @@ div[class*="card"], div[class*="box"], div[class*="container"], main, section, f
     -webkit-backdrop-filter: blur(10px) !important; 
     border: 1px solid rgba(139, 0, 0, 0.3) !important; 
     border-radius: 15px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8) !important; 
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.4), 0 0 20px rgba(139, 0, 0, 0.2) !important; 
     transition: all 0.3s ease;
 }
 
