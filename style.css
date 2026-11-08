@@ -4,7 +4,6 @@
 :root {
     --accent: #5c0e1b; 
     --bg-main: #0a0a0a; 
-    --bg-glass: rgba(30, 0, 0, 0.4); 
     --text-color: #f0e6d2; 
     --border-color: rgba(139, 0, 0, 0.3);
     --day-bg: #fdfbf7; 
@@ -12,13 +11,12 @@
 
 body.light-mode {
     --bg-main: var(--day-bg); 
-    --bg-glass: rgba(255, 255, 255, 0.7); 
     --text-color: #3b1f1f; 
     --border-color: rgba(0, 0, 0, 0.1);
 }
 
 /* ==========================================
-   ۲. استایل‌های کلی سایت
+   ۲. استایل‌های کلی سایت (بدون افکت شیشه‌ای)
    ========================================== */
 body {
     background-color: var(--bg-main) !important;
@@ -26,36 +24,26 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
-div[class*="card"], div[class*="box"], div[class*="container"], form, section, .dashboard-card {
-    background: var(--bg-glass) !important; 
-    backdrop-filter: blur(12px) !important; 
-    -webkit-backdrop-filter: blur(12px) !important; 
+div[class*="card"], div[class*="box"], div[class*="container"], form, section {
+    background: transparent !important; 
     border: 1px solid var(--border-color) !important; 
     border-radius: 15px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1) !important;
     transition: all 0.3s ease;
 }
 
-/* هماهنگ کردن تمام دکمه‌ها و المان‌ها با رنگ اصلی */
 button, a[href], input[type="submit"], .nav-btn {
-    transition: all 0.3s ease-in-out !important;
+    transition: all 0.3s ease !important;
     border-radius: 8px;
     background-color: var(--accent) !important;
-    color: var(--text-color) !important; 
+    color: #f0e6d2 !important; 
     border: 1px solid var(--accent) !important;
 }
 
 button:hover, a[href]:hover, input[type="submit"]:hover, .nav-btn:hover {
-    box-shadow: 0 0 15px var(--accent) !important; 
-    transform: translateY(-2px);
+    opacity: 0.8 !important;
 }
 
-/* رنگ ساعت و کادرهای زرشکی که توی عکس بود */
+/* هماهنگ کردن ساعت با رنگ اصلی */
 .clock-time, h1, h2, .quote-text, [class*="time"] {
     color: var(--accent) !important; 
-}
-
-/* حذف دکمه Support از نوار بالا */
-.nav-btn[href*="support"], .nav-btn[href*="Support"] {
-    display: none !important;
 }
