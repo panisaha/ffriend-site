@@ -1,22 +1,23 @@
 /* ==========================================
-   ۱. متغیرهای اصلی (پیش‌فرض: شب)
+   ۱. متغیرهای اصلی (تم شب و روز)
    ========================================== */
 :root {
-    --accent: #5c0e1b; 
-    --bg-main: #0a0a0a; 
-    --text-color: #f0e6d2; 
+    --bg-main: #0a0a0a;
+    --bg-card: #111111;
+    --accent: #5c0e1b; /* زرشکی ثابت */
+    --text-color: #f0e6d2;
     --border-color: rgba(139, 0, 0, 0.3);
-    --day-bg: #fdfbf7; 
 }
 
 body.light-mode {
-    --bg-main: var(--day-bg); 
-    --text-color: #3b1f1f; 
+    --bg-main: #fdfbf7; 
+    --bg-card: #ffffff;
+    --text-color: #3b1f1f;
     --border-color: rgba(0, 0, 0, 0.1);
 }
 
 /* ==========================================
-   ۲. استایل‌های کلی سایت (بدون افکت شیشه‌ای)
+   ۲. استایل‌های کلی
    ========================================== */
 body {
     background-color: var(--bg-main) !important;
@@ -25,25 +26,77 @@ body {
 }
 
 div[class*="card"], div[class*="box"], div[class*="container"], form, section {
-    background: transparent !important; 
+    background: var(--bg-card) !important; 
     border: 1px solid var(--border-color) !important; 
     border-radius: 15px;
-    transition: all 0.3s ease;
+    color: var(--text-color) !important;
 }
 
+/* ==========================================
+   ۳. دکمه‌ها (همیشه زرشکی می‌مونن)
+   ========================================== */
 button, a[href], input[type="submit"], .nav-btn {
-    transition: all 0.3s ease !important;
-    border-radius: 8px;
     background-color: var(--accent) !important;
     color: #f0e6d2 !important; 
     border: 1px solid var(--accent) !important;
+    border-radius: 8px;
+    transition: opacity 0.3s ease !important;
 }
 
-button:hover, a[href]:hover, input[type="submit"]:hover, .nav-btn:hover {
+button:hover, a[href]:hover, .nav-btn:hover {
     opacity: 0.8 !important;
 }
 
-/* هماهنگ کردن ساعت با رنگ اصلی */
-.clock-time, h1, h2, .quote-text, [class*="time"] {
-    color: var(--accent) !important; 
+/* ==========================================
+   ۴. استایل‌های پروفایل (ریسپانسیو)
+   ========================================== */
+/* حالت گوشی (عمودی) */
+#profile-container {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    flex-direction: column; /* عمودی در گوشی */
+    align-items: center;
+    background: var(--bg-card);
+    padding: 10px;
+    border-radius: 15px;
+    border: 1px solid var(--border-color);
+    z-index: 9998;
+    width: 70px; /* باریک باشه که روی دکمه‌ها نیفته */
+}
+
+#profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 5px;
+    border: 2px solid var(--accent);
+}
+
+#profile-name {
+    font-size: 12px;
+    text-align: center;
+    word-break: break-all;
+    color: var(--text-color);
+}
+
+/* حالت کامپیوتر (افقی) */
+@media (min-width: 768px) {
+    #profile-container {
+        flex-direction: row; /* افقی در کامپیوتر */
+        width: auto;
+        padding: 10px 20px;
+        gap: 15px;
+    }
+    #profile-img {
+        margin-bottom: 0;
+        width: 50px;
+        height: 50px;
+    }
+    #profile-name {
+        font-size: 16px;
+        text-align: left;
+    }
 }
