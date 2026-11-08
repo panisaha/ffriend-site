@@ -1,46 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // ۱. ساخت کادر پروفایل (با کلاس‌های CSS برای ریسپانسیو بودن)
-    const profileBox = document.createElement('div');
-    profileBox.id = 'profile-container';
-    profileBox.innerHTML = `
-        <img id="profile-img" src="icon-192x192.png" alt="Profile">
-        <span id="profile-name">User</span>
-    `;
-    document.body.appendChild(profileBox);
-
-    // ۲. ساخت دکمه چرخ‌دنده
+    // ۱. ساخت دکمه چرخ‌دنده (بدون هیچ پس‌زمینه و دایره‌ای)
     const settingsBtn = document.createElement('button');
     settingsBtn.innerHTML = '<i class="fas fa-cog"></i>';
-    settingsBtn.style.cssText = `
-        position: fixed; top: 15px; left: 15px; z-index: 9999;
-        background: transparent; color: var(--text-color, #f0e6d2);
-        border: none; font-size: 26px; cursor: pointer;
-        padding: 5px;
-    `;
+    settingsBtn.id = 'clean-settings-btn'; // یه آیدی تمیز براش گذاشتیم
     document.body.appendChild(settingsBtn);
 
-    // ۳. ساخت منوی تنظیمات (فقط اکانت و تم)
+    // ۲. ساخت منوی تنظیمات (فقط اکانت و تم)
     const sidebar = document.createElement('div');
-    sidebar.style.cssText = `
-        position: fixed; top: 0; left: -300px; width: 280px; height: 100vh;
-        background: var(--bg-main, #0a0a0a); border-right: 2px solid var(--accent, #5c0e1b);
-        color: var(--text-color, #f0e6d2); z-index: 10000; padding: 20px; box-sizing: border-box;
-        transition: left 0.3s ease; overflow-y: auto;
-    `;
+    sidebar.id = 'clean-settings-sidebar';
     
     sidebar.innerHTML = `
         <h2 style="color: var(--accent, #5c0e1b); margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Settings</h2>
         
         <h3 style="font-size: 16px; margin-top: 20px;">Account</h3>
-        
-        <!-- آپلود عکس -->
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-            <img id="profileImagePreview" src="icon-192x192.png" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent);">
-            <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
-            <button id="uploadImageBtn" style="padding: 8px 12px; border-radius: 8px; background: var(--bg-card); color: var(--text-color); border: 1px solid var(--border-color); cursor: pointer;">Upload Photo</button>
-        </div>
-
         <input type="text" id="usernameInput" placeholder="Your Name" style="width: 100%; padding: 10px; margin-bottom: 10px; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 8px; box-sizing: border-box;">
         <button id="saveNameBtn" style="width: 100%; padding: 10px; border-radius: 8px; background: var(--accent); color: #f0e6d2; border: none; cursor: pointer;">Change Account</button>
 
@@ -54,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.body.appendChild(sidebar);
 
-    // ۴. باز و بسته کردن منو
+    // ۳. باز و بسته کردن منو
     settingsBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         sidebar.style.left = '0px';
@@ -66,28 +39,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // ۵. ذخیره و لود کردن نام و عکس
+    // ۴. ذخیره و لود کردن نام
     const nameInp = document.getElementById('usernameInput');
-    const nameDisplay = document.getElementById('profile-name');
-    const profileImgDisplay = document.getElementById('profile-img');
-    const profileImgPreview = document.getElementById('profileImagePreview');
-    const imageInput = document.getElementById('profileImageInput');
-    
     const savedName = localStorage.getItem('userName') || 'User';
     nameInp.value = savedName;
-    nameDisplay.innerText = savedName;
 
-    const savedImg = localStorage.getItem('profileImage') || 'icon-192x192.png';
-    profileImgDisplay.src = savedImg;
-    profileImgPreview.src = savedImg;
-
-    // دکمه تغییر اکانت
     document.getElementById('saveNameBtn').addEventListener('click', () => {
-        const newName = nameInp.value || 'User';
-        localStorage.setItem('userName', newName);
-        nameDisplay.innerText = newName;
-        
-        // پیام موفقیت شیک
+        localStorage.setItem('userName', nameInp.value || 'User');
         const toast = document.createElement('div');
         toast.innerText = 'Name Saved!';
         toast.style.cssText = `position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #f0e6d2; padding: 10px 20px; border-radius: 20px; font-size: 14px; z-index: 99999; transition: opacity 0.3s;`;
@@ -95,24 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 2000);
     });
 
-    // دکمه آپلود عکس
-    document.getElementById('uploadImageBtn').addEventListener('click', () => imageInput.click());
-    
-    imageInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const base64Img = event.target.result;
-                localStorage.setItem('profileImage', base64Img);
-                profileImgDisplay.src = base64Img;
-                profileImgPreview.src = base64Img;
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    // ۶. تغییر تم شب و روز
+    // ۵. تغییر تم شب و روز
     document.querySelectorAll('input[name="themeMode"]').forEach(radio => {
         radio.addEventListener('change', (e) => {
             if (e.target.value === 'light') {
