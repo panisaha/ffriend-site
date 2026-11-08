@@ -1,5 +1,5 @@
 /* ==========================================
-   ۱. متغیرهای اصلی (تم شب و روز)
+   ۱. متغیرهای اصلی
    ========================================== */
 :root {
     --bg-main: #0a0a0a;
@@ -33,9 +33,9 @@ div[class*="card"], div[class*="box"], div[class*="container"], form, section {
 }
 
 /* ==========================================
-   ۳. دکمه‌ها (همیشه زرشکی می‌مونن)
+   ۳. دکمه‌ها (زرشکی ثابت)
    ========================================== */
-button, a[href], input[type="submit"], .nav-btn {
+button:not(#clean-settings-btn), a[href], input[type="submit"], .nav-btn {
     background-color: var(--accent) !important;
     color: #f0e6d2 !important; 
     border: 1px solid var(--accent) !important;
@@ -43,60 +43,54 @@ button, a[href], input[type="submit"], .nav-btn {
     transition: opacity 0.3s ease !important;
 }
 
-button:hover, a[href]:hover, .nav-btn:hover {
+button:not(#clean-settings-btn):hover, a[href]:hover, .nav-btn:hover {
     opacity: 0.8 !important;
 }
 
 /* ==========================================
-   ۴. استایل‌های پروفایل (ریسپانسیو)
+   ۴. استایل دکمه چرخ‌دنده (کاملاً لخت)
    ========================================== */
-/* حالت گوشی (عمودی) */
-#profile-container {
+#clean-settings-btn {
     position: fixed;
     top: 15px;
-    right: 15px;
-    display: flex;
-    flex-direction: column; /* عمودی در گوشی */
-    align-items: center;
-    background: var(--bg-card);
-    padding: 10px;
-    border-radius: 15px;
-    border: 1px solid var(--border-color);
-    z-index: 9998;
-    width: 70px; /* باریک باشه که روی دکمه‌ها نیفته */
+    left: 15px;
+    z-index: 9999;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 0;
+    /* رنگش دقیقاً برعکس پس‌زمینه باشه */
+    color: var(--text-color) !important; 
+    transition: transform 0.3s, color 0.3s;
 }
 
-#profile-img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 5px;
-    border: 2px solid var(--accent);
+/* وقتی تم روزه، رنگ چرخ‌دنده تیره بشه */
+body.light-mode #clean-settings-btn {
+    color: #0a0a0a !important; 
 }
 
-#profile-name {
-    font-size: 12px;
-    text-align: center;
-    word-break: break-all;
+#clean-settings-btn:hover {
+    transform: rotate(90deg);
+}
+
+/* ==========================================
+   ۵. استایل منوی تنظیمات
+   ========================================== */
+#clean-settings-sidebar {
+    position: fixed;
+    top: 0;
+    left: -300px;
+    width: 280px;
+    height: 100vh;
+    background: var(--bg-main);
+    border-right: 2px solid var(--accent);
     color: var(--text-color);
-}
-
-/* حالت کامپیوتر (افقی) */
-@media (min-width: 768px) {
-    #profile-container {
-        flex-direction: row; /* افقی در کامپیوتر */
-        width: auto;
-        padding: 10px 20px;
-        gap: 15px;
-    }
-    #profile-img {
-        margin-bottom: 0;
-        width: 50px;
-        height: 50px;
-    }
-    #profile-name {
-        font-size: 16px;
-        text-align: left;
-    }
+    z-index: 10000;
+    padding: 20px;
+    box-sizing: border-box;
+    transition: left 0.3s ease;
+    overflow-y: auto;
 }
