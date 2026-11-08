@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <input type="color" id="customColorPicker" style="width: 100%; height: 40px; border: none; background: none; cursor: pointer;">
 
         <h3 style="font-size: 16px; margin-top: 20px;">Support</h3>
-        <form id="supportForm" action="YOUR_FORMSPREE_ENDPOINT" method="POST">
+        <form id="supportForm" action="https://formspree.io/f/mgaaqgnz" method="POST">
             <input type="text" name="name" placeholder="Name" style="width: 100%; padding: 8px; margin-bottom: 5px; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 5px;">
             <input type="email" name="email" placeholder="Email" style="width: 100%; padding: 8px; margin-bottom: 5px; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 5px;">
             <textarea name="message" placeholder="Message" rows="2" style="width: 100%; padding: 8px; margin-bottom: 5px; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 5px;"></textarea>
