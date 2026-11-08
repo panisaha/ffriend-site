@@ -7,17 +7,20 @@ if ('serviceWorker' in navigator) {
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    // ۱. ساخت دکمه چرخ‌دنده
+    // ۱. ساخت دکمه تنظیمات (با آیکون Font Awesome)
     const settingsBtn = document.createElement('button');
-    settingsBtn.innerHTML = '⚙️';
+    settingsBtn.innerHTML = '<i class="fas fa-cog"></i>'; // آیکون چرخ‌دنده
     settingsBtn.style.cssText = `
         position: fixed; top: 15px; left: 15px; z-index: 9999;
         background: var(--bg-glass, #1a1a1a); color: var(--text-color, #f0e6d2);
         border: 1px solid var(--border-color, #8b0000); border-radius: 50%;
-        width: 45px; height: 45px; font-size: 22px; cursor: pointer;
+        width: 45px; height: 45px; font-size: 20px; cursor: pointer;
         display: flex; align-items: center; justify-content: center;
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px); transition: transform 0.3s;
     `;
+    // افکت چرخش موقع هاور کردن
+    settingsBtn.onmouseover = () => settingsBtn.style.transform = 'rotate(90deg)';
+    settingsBtn.onmouseout = () => settingsBtn.style.transform = 'rotate(0deg)';
     document.body.appendChild(settingsBtn);
 
     // ۲. ساخت منوی کناری
