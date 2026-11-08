@@ -1,10 +1,10 @@
 /* ==========================================
-   ۱. متغیرهای اصلی
+   ۱. متغیرها
    ========================================== */
 :root {
     --bg-main: #0a0a0a;
     --bg-card: #111111;
-    --accent: #5c0e1b; /* زرشکی ثابت */
+    --accent: #5c0e1b; 
     --text-color: #f0e6d2;
     --border-color: rgba(139, 0, 0, 0.3);
 }
@@ -33,7 +33,7 @@ div[class*="card"], div[class*="box"], div[class*="container"], form, section {
 }
 
 /* ==========================================
-   ۳. دکمه‌ها (زرشکی ثابت)
+   ۳. دکمه‌های اصلی
    ========================================== */
 button:not(#clean-settings-btn), a[href], input[type="submit"], .nav-btn {
     background-color: var(--accent) !important;
@@ -48,7 +48,7 @@ button:not(#clean-settings-btn):hover, a[href]:hover, .nav-btn:hover {
 }
 
 /* ==========================================
-   ۴. استایل دکمه چرخ‌دنده (کاملاً لخت)
+   ۴. استایل دکمه چرخ‌دنده (بدون هیچ دایره‌ای)
    ========================================== */
 #clean-settings-btn {
     position: fixed;
@@ -62,12 +62,10 @@ button:not(#clean-settings-btn):hover, a[href]:hover, .nav-btn:hover {
     font-size: 28px;
     cursor: pointer;
     padding: 0;
-    /* رنگش دقیقاً برعکس پس‌زمینه باشه */
     color: var(--text-color) !important; 
     transition: transform 0.3s, color 0.3s;
 }
 
-/* وقتی تم روزه، رنگ چرخ‌دنده تیره بشه */
 body.light-mode #clean-settings-btn {
     color: #0a0a0a !important; 
 }
@@ -93,4 +91,57 @@ body.light-mode #clean-settings-btn {
     box-sizing: border-box;
     transition: left 0.3s ease;
     overflow-y: auto;
+}
+
+/* ==========================================
+   ۶. استایل کادر پروفایل (ریسپانسیو)
+   ========================================== */
+#profile-container {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    flex-direction: column; /* در گوشی عمودی */
+    align-items: center;
+    background: var(--bg-card);
+    padding: 10px;
+    border-radius: 15px;
+    border: 1px solid var(--border-color);
+    z-index: 9998;
+    width: 70px;
+}
+
+#profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 5px;
+    border: 2px solid var(--accent);
+}
+
+#profile-name {
+    font-size: 12px;
+    text-align: center;
+    word-break: break-all;
+    color: var(--text-color);
+}
+
+/* در کامپیوتر افقی بشه */
+@media (min-width: 768px) {
+    #profile-container {
+        flex-direction: row;
+        width: auto;
+        padding: 10px 20px;
+        gap: 15px;
+    }
+    #profile-img {
+        margin-bottom: 0;
+        width: 50px;
+        height: 50px;
+    }
+    #profile-name {
+        font-size: 16px;
+        text-align: left;
+    }
 }
