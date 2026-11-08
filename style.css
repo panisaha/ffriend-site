@@ -1,24 +1,24 @@
 /* ==========================================
-   ۱. تعریف متغیرها (تم پیش‌فرض = شب)
+   ۱. متغیرهای اصلی (پیش‌فرض: شب)
    ========================================== */
 :root {
-    --accent: #5c0e1b; /* رنگ اصلی (زرشکی) */
-    --bg-main: #0a0a0a; /* پس‌زمینه مشکی */
-    --bg-glass: rgba(30, 0, 0, 0.4); /* شیشه تیره */
-    --text-color: #f0e6d2; /* متن کرم */
+    --accent: #5c0e1b; 
+    --bg-main: #0a0a0a; 
+    --bg-glass: rgba(30, 0, 0, 0.4); 
+    --text-color: #f0e6d2; 
     --border-color: rgba(139, 0, 0, 0.3);
+    --day-bg: #fdfbf7; 
 }
 
-/* حالت روز (روشن) */
 body.light-mode {
-    --bg-main: #fdfbf7; /* سفید متمایل به کرم */
-    --bg-glass: rgba(255, 255, 255, 0.7); /* شیشه سفید */
-    --text-color: #3b1f1f; /* قهوه‌ای تیره */
+    --bg-main: var(--day-bg); 
+    --bg-glass: rgba(255, 255, 255, 0.7); 
+    --text-color: #3b1f1f; 
     --border-color: rgba(0, 0, 0, 0.1);
 }
 
 /* ==========================================
-   ۲. استایل‌های اصلی سایت با استفاده از متغیرها
+   ۲. استایل‌های کلی سایت
    ========================================== */
 body {
     background-color: var(--bg-main) !important;
@@ -26,27 +26,33 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
-div[class*="card"], div[class*="box"], div[class*="container"], form, section {
+div[class*="card"], div[class*="box"], div[class*="container"], form, section, .dashboard-card {
     background: var(--bg-glass) !important; 
     backdrop-filter: blur(12px) !important; 
     -webkit-backdrop-filter: blur(12px) !important; 
     border: 1px solid var(--border-color) !important; 
     border-radius: 15px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1) !important;
     transition: all 0.3s ease;
 }
 
+/* هماهنگ کردن تمام دکمه‌ها و المان‌ها با رنگ اصلی */
 button, a[href], input[type="submit"], .nav-btn {
     transition: all 0.3s ease-in-out !important;
     border-radius: 8px;
     background-color: var(--accent) !important;
-    color: #f0e6d2 !important; 
+    color: var(--text-color) !important; 
     border: 1px solid var(--accent) !important;
 }
 
 button:hover, a[href]:hover, input[type="submit"]:hover, .nav-btn:hover {
     box-shadow: 0 0 15px var(--accent) !important; 
     transform: translateY(-2px);
+}
+
+/* رنگ ساعت و کادرهای زرشکی که توی عکس بود */
+.clock-time, h1, h2, .quote-text, [class*="time"] {
+    color: var(--accent) !important; 
 }
 
 /* حذف دکمه Support از نوار بالا */
