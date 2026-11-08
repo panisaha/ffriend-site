@@ -94,34 +94,34 @@ body.light-mode #clean-settings-btn {
 }
 
 /* ==========================================
-   ۶. استایل کادر پروفایل (ریسپانسیو)
+   ۶. استایل کادر پروفایل (زیر چرخ‌دنده و لاغر)
    ========================================== */
 #profile-container {
     position: fixed;
-    top: 15px;
-    right: 15px;
+    top: 60px; /* دقیقا زیر چرخ‌دنده */
+    left: 15px; /* هم‌راستا با چرخ‌دنده */
     display: flex;
     flex-direction: column; /* در گوشی عمودی */
     align-items: center;
     background: var(--bg-card);
-    padding: 10px;
-    border-radius: 15px;
+    padding: 8px;
+    border-radius: 12px;
     border: 1px solid var(--border-color);
     z-index: 9998;
-    width: 70px;
+    width: 55px; /* باریک‌تر */
 }
 
 #profile-img {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     object-fit: cover;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
     border: 2px solid var(--accent);
 }
 
 #profile-name {
-    font-size: 12px;
+    font-size: 11px;
     text-align: center;
     word-break: break-all;
     color: var(--text-color);
@@ -132,16 +132,18 @@ body.light-mode #clean-settings-btn {
     #profile-container {
         flex-direction: row;
         width: auto;
-        padding: 10px 20px;
-        gap: 15px;
+        top: 15px; 
+        left: 60px; /* کنار چرخ‌دنده */
+        padding: 8px 15px;
+        gap: 10px;
     }
     #profile-img {
         margin-bottom: 0;
-        width: 50px;
-        height: 50px;
+        width: 40px;
+        height: 40px;
     }
     #profile-name {
-        font-size: 16px;
+        font-size: 14px;
         text-align: left;
     }
 }
