@@ -1,46 +1,119 @@
 /* ==========================================
-   ۱. تنظیمات کلی
+   ۱. تعریف متغیرها (تم پیش‌فرض = شب)
    ========================================== */
-body {
-    background-color: #0a0a0a !important; 
-    color: #f0e6d2 !important; 
+:root {
+    --accent: #5c0e1b; /* رنگ اصلی (زرشکی) */
+    --bg-main: #0a0a0a; /* پس‌زمینه مشکی */
+    --bg-glass: rgba(30, 0, 0, 0.4); /* شیشه تیره */
+    --text-color: #f0e6d2; /* متن کرم */
+    --border-color: rgba(139, 0, 0, 0.3);
+}
+
+/* حالت روز (روشن) */
+body.light-mode {
+    --bg-main: #fdfbf7; /* سفید متمایل به کرم */
+    --bg-glass: rgba(255, 255, 255, 0.7); /* شیشه سفید */
+    --text-color: #3b1f1f; /* قهوه‌ای تیره */
+    --border-color: rgba(0, 0, 0, 0.1);
 }
 
 /* ==========================================
-   ۲. کادرهای شیشه‌ای (تیره و لوکس)
+   ۲. استایل‌های اصلی سایت با استفاده از متغیرها
    ========================================== */
+body {
+    background-color: var(--bg-main) !important;
+    color: var(--text-color) !important;
+    transition: background-color 0.3s, color 0.3s;
+}
+
 div[class*="card"], div[class*="box"], div[class*="container"], form, section {
-    background: rgba(30, 0, 0, 0.4) !important; 
+    background: var(--bg-glass) !important; 
     backdrop-filter: blur(12px) !important; 
     -webkit-backdrop-filter: blur(12px) !important; 
-    border: 1px solid rgba(139, 0, 0, 0.3) !important; 
+    border: 1px solid var(--border-color) !important; 
     border-radius: 15px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8) !important; 
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
     transition: all 0.3s ease;
 }
 
-/* ==========================================
-   ۳. دکمه‌ها (تغییر رنگ به زرشکی تیره + درخشش ملایم)
-   ========================================== */
 button, a[href], input[type="submit"], .nav-btn {
     transition: all 0.3s ease-in-out !important;
     border-radius: 8px;
-    /* این خط رنگ دکمه‌های قرمز تو رو به زرشکی تیره تبدیل می‌کنه */
-    background-color: rgba(92, 14, 27, 0.8) !important; 
-    color: #f0e6d2 !important;
-    border: 1px solid #5c0e1b !important;
+    background-color: var(--accent) !important;
+    color: #f0e6d2 !important; 
+    border: 1px solid var(--accent) !important;
 }
 
 button:hover, a[href]:hover, input[type="submit"]:hover, .nav-btn:hover {
-    /* درخشش زرشکیِ ملایم ولی قابل دیدن */
-    box-shadow: 0 0 15px rgba(139, 0, 0, 0.8) !important; 
-    border-color: #8b0000 !important; 
+    box-shadow: 0 0 15px var(--accent) !important; 
     transform: translateY(-2px);
 }
 
+/* حذف دکمه Support از نوار بالا */
+.nav-btn[href*="support"], .nav-btn[href*="Support"] {
+    display: none !important;
+}
+
 /* ==========================================
-   ۴. اسکرول‌بار
+   ۳. استایل‌های مربوط به منوی تنظیمات
    ========================================== */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: #0a0a0a; }
-::-webkit-scrollbar-thumb { background: #8b0000; border-radius: 4px; }
+#openSettingsBtn {
+    position: fixed !important; 
+    top: 15px !important; 
+    right: 15px !important; 
+    z-index: 9999 !important; 
+    background: var(--bg-glass) !important; 
+    color: var(--text-color) !important; 
+    border: 1px solid var(--border-color) !important; 
+    border-radius: 50% !important; 
+    width: 45px !important; 
+    height: 45px !important; 
+    font-size: 22px !important; 
+    cursor: pointer !important; 
+    backdrop-filter: blur(10px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+#settingsSidebar {
+    position: fixed !important; 
+    top: 0 !important; 
+    right: -350px !important; 
+    width: 300px !important; 
+    height: 100vh !important; 
+    background: var(--bg-main) !important; 
+    border-left: 2px solid var(--border-color) !important; 
+    z-index: 10000 !important; 
+    padding: 20px !important; 
+    box-sizing: border-box !important; 
+    transition: right 0.3s ease !important; 
+    overflow-y: auto !important; 
+    box-shadow: -5px 0 20px rgba(0,0,0,0.5) !important;
+}
+
+#settingsSidebar h2, #settingsSidebar h3 {
+    color: var(--accent) !important;
+}
+
+#settingsSidebar input[type="text"], 
+#settingsSidebar input[type="email"], 
+#settingsSidebar textarea {
+    background: var(--bg-glass) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+#settingsSidebar button {
+    background-color: var(--accent) !important;
+    color: #f0e6d2 !important;
+}
+
+.color-circle {
+    width: 30px !important; 
+    height: 30px !important; 
+    border-radius: 50% !important; 
+    cursor: pointer !important; 
+    border: 2px solid transparent !important;
+    transition: border 0.2s !important;
+}
