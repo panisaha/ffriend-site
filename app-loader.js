@@ -1,21 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
     
+    // این همون متن Base64 هست که عکس کتاب رو توش ذخیره کردیم
+    const myImageBase64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjgwIiBmaWxsPSIjMWExYTFhIi8+PHBhdGggZD0iTTE2MCAxNDBsMTYwIDB2MjAwbC0xNjAgMHoiIGZpbGw9IiNmMGU2ZDIiLz48cGF0aCBkPSJNMTYwIDE0MGwtMzAgMHYyMjBsMzAgMHoiIGZpbGw9IiNmMGU2ZDIiLz48cGF0aCBkPSJNMTMwIDM2MGwxNjAgMHYzMGwtMTYwIDB6IiBmaWxsPSIjZjBlNmQyIi8+PC9zdmc+';
+
     // ۱. ساخت کادر پروفایل
     const profileBox = document.createElement('div');
     profileBox.id = 'profile-container';
     profileBox.innerHTML = `
-        <img id="profile-img" src="icon-192x192.png" alt="Profile">
+        <img id="profile-img" src="${myImageBase64}" alt="Profile">
         <span id="profile-name">User</span>
     `;
     document.body.appendChild(profileBox);
 
-    // ۲. ساخت دکمه چرخ‌دنده (بدون پس‌زمینه)
+    // ۲. ساخت دکمه چرخ‌دنده
     const settingsBtn = document.createElement('button');
     settingsBtn.innerHTML = '<i class="fas fa-cog"></i>';
     settingsBtn.id = 'clean-settings-btn';
     document.body.appendChild(settingsBtn);
 
-    // ۳. ساخت منوی تنظیمات (اکانت و تم)
+    // ۳. ساخت منوی تنظیمات
     const sidebar = document.createElement('div');
     sidebar.id = 'clean-settings-sidebar';
     
@@ -24,9 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         <h3 style="font-size: 16px; margin-top: 20px;">Account</h3>
         
-        <!-- آپلود عکس -->
         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-            <img id="profileImagePreview" src="icon-192x192.png" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent);">
+            <img id="profileImagePreview" src="${myImageBase64}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent);">
             <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
             <button id="uploadImageBtn" style="padding: 8px 12px; border-radius: 8px; background: var(--bg-card); color: var(--text-color); border: 1px solid var(--border-color); cursor: pointer;">Upload Photo</button>
         </div>
@@ -67,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     nameInp.value = savedName;
     nameDisplay.innerText = savedName;
 
-    const savedImg = localStorage.getItem('profileImage') || 'icon-192x192.png';
+    const savedImg = localStorage.getItem('profileImage') || myImageBase64;
     profileImgDisplay.src = savedImg;
     profileImgPreview.src = savedImg;
 
@@ -84,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('uploadImageBtn').addEventListener('click', () => imageInput.click());
+    
     imageInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
