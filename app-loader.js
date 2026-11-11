@@ -53,8 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     document.addEventListener('click', (e) => {
-        if (!sidebar.contains(e.target) && !settingsBtn.contains(e.target)) {
-            sidebar.style.left = '-300px';
+        if (!sidebar.contains(e.target) && !settingsBtn.contains(e.target) && sidebar.style.left === '0px') {
+            sidebar.style.left = '-350px';
         }
     });
 
