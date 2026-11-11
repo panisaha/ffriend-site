@@ -129,3 +129,12 @@ body {
     text-align: center;
     color: var(--text-color);
    }
+
+/* اضافه کردن فونت‌آوسام از سرور گوگل (برای درست شدن آیکون‌ها) */
+@import url('https://fonts.googleapis.com/css2?family=Font+Awesome+6+Free:wght@400;900&display=swap');
+
+/* استایل پایه برای آیکون‌ها */
+.fas, .fa {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+}
