@@ -16,70 +16,39 @@ body.light-mode {
     --border-color: rgba(0, 0, 0, 0.1);
 }
 
-/* ==========================================
-   ۲. استایل‌های کلی
-   ========================================== */
 body {
     background-color: var(--bg-main) !important;
     color: var(--text-color) !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
     transition: background-color 0.3s, color 0.3s;
-    touch-action: pan-x pan-y !important; 
-}
-
-div[class*="card"], div[class*="box"], div[class*="container"], form, section {
-    background: var(--bg-card) !important; 
-    border: 1px solid var(--border-color) !important; 
-    border-radius: 15px;
-    color: var(--text-color) !important;
 }
 
 /* ==========================================
-   ۳. دکمه‌ها
-   ========================================== */
-button:not(#clean-settings-btn), a[href], input[type="submit"], .nav-btn {
-    background-color: var(--accent) !important;
-    color: #f0e6d2 !important; 
-    border: 1px solid var(--accent) !important;
-    border-radius: 8px;
-    transition: opacity 0.3s ease !important;
-}
-
-button:not(#clean-settings-btn):hover, a[href]:hover, .nav-btn:hover {
-    opacity: 0.8 !important;
-}
-
-/* ==========================================
-   ۴. دکمه چرخ‌دنده
+   ۲. دکمه چرخ‌دنده (تمیز)
    ========================================== */
 #clean-settings-btn {
-    position: fixed;
-    top: 15px;
-    left: 15px;
-    z-index: 9999;
+    position: fixed !important;
+    top: 15px !important;
+    left: 15px !important;
+    z-index: 9999 !important;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    font-size: 28px;
+    font-size: 28px !important;
     cursor: pointer;
     color: var(--text-color) !important; 
-    transition: transform 0.3s, color 0.3s;
+    transition: transform 0.3s;
 }
-
-body.light-mode #clean-settings-btn {
-    color: #0a0a0a !important; 
-}
-
-#clean-settings-btn:hover {
-    transform: rotate(90deg);
-}
+#clean-settings-btn:hover { transform: rotate(90deg); }
+body.light-mode #clean-settings-btn { color: #0a0a0a !important; }
 
 /* ==========================================
-   ۵. منوی تنظیمات (مخفی در سمت چپ)
+   ۳. منوی تنظیمات (کاملاً مخفی در سمت چپ)
    ========================================== */
 #clean-settings-sidebar {
     position: fixed !important;
     top: 0 !important;
-    left: -350px !important; /* بیرون از صفحه */
+    left: -350px !important; /* مخفی */
     width: 300px !important;
     height: 100vh !important;
     background: var(--bg-main) !important;
@@ -94,58 +63,46 @@ body.light-mode #clean-settings-btn {
 }
 
 /* ==========================================
-   ۶. کادر پروفایل
+   ۴. کادر پروفایل
    ========================================== */
 #profile-container {
-    position: fixed;
-    bottom: 20px;
-    right: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: var(--bg-card);
-    padding: 6px;
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
-    z-index: 9998;
-    width: 50px;
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 15px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    background: var(--bg-card) !important;
+    padding: 6px !important;
+    border-radius: 12px !important;
+    border: 1px solid var(--border-color) !important;
+    z-index: 9998 !important;
+    width: 50px !important;
 }
 
 #profile-img {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 4px;
-    border: 2px solid var(--accent);
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    margin-bottom: 4px !important;
+    border: 2px solid var(--accent) !important;
 }
 
 #profile-name {
-    font-size: 10px;
-    text-align: center;
-    word-break: break-all;
-    color: var(--text-color);
+    font-size: 10px !important;
+    text-align: center !important;
+    word-break: break-all !important;
+    color: var(--text-color) !important;
 }
 
-/* ==========================================
-   ۷. ریسپانسیو
-   ========================================== */
 @media (min-width: 600px) {
     #profile-container {
-        flex-direction: row;
-        width: auto;
-        bottom: 20px; 
-        right: 20px;
-        padding: 8px 15px;
-        gap: 10px;
+        flex-direction: row !important;
+        width: auto !important;
+        padding: 8px 15px !important;
+        gap: 10px !important;
     }
-    #profile-img {
-        margin-bottom: 0;
-        width: 40px;
-        height: 40px;
-    }
-    #profile-name {
-        font-size: 14px;
-        text-align: left;
-    }
+    #profile-img { margin-bottom: 0 !important; width: 40px !important; height: 40px !important; }
+    #profile-name { font-size: 14px !important; text-align: left !important; }
 }
