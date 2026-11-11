@@ -24,34 +24,65 @@ body {
     color: var(--text-color) !important;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
     transition: background-color 0.3s, color 0.3s;
-    touch-action: pan-x pan-y !important; /* جلوگیری از زوم */
-}
-
-div[class*="card"], div[class*="box"], div[class*="container"], form, section {
-    background: var(--bg-card) !important; 
-    border: 1px solid var(--border-color) !important; 
-    border-radius: 15px;
-    color: var(--text-color) !important;
+    touch-action: pan-x pan-y !important; 
 }
 
 /* ==========================================
-   ۳. دکمه‌های اصلی
+   ۳. استایل اپ‌رپر و نوار دکمه‌ها (مشکل اصلی همین بود!)
    ========================================== */
-button:not(#clean-settings-btn), a[href], input[type="submit"], .nav-btn {
+.app-wrapper {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 30px;
+    margin-top: 50px;
+}
+
+.nav-btn {
     background-color: var(--accent) !important;
     color: #f0e6d2 !important; 
     border: 1px solid var(--accent) !important;
-    border-radius: 8px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
     transition: opacity 0.3s ease !important;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
 }
 
-button:not(#clean-settings-btn):hover, a[href]:hover, .nav-btn:hover {
+.nav-btn:hover {
     opacity: 0.8 !important;
 }
 
 /* ==========================================
-   ۴. استایل دکمه چرخ‌دنده (بدون هیچ دایره‌ای)
+   ۴. کادر اصلی (ساعت و تاریخ)
+   ========================================== */
+.dashboard-card {
+    background: var(--bg-card) !important;
+    border-radius: 20px;
+    padding: 40px 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color) !important;
+}
+
+.greeting { font-size: 2.5rem; margin-bottom: 10px; }
+.clock { font-size: 4rem; font-weight: bold; color: var(--accent); margin: 10px 0; font-family: monospace; }
+.date { font-size: 1.2rem; color: #aaa; margin-bottom: 20px; }
+.quote-box { background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 15px; font-style: italic; color: #ccc; border-left: 4px solid var(--accent); }
+
+/* ==========================================
+   ۵. دکمه چرخ‌دنده
    ========================================== */
 #clean-settings-btn {
     position: fixed;
@@ -60,44 +91,18 @@ button:not(#clean-settings-btn):hover, a[href]:hover, .nav-btn:hover {
     z-index: 9999;
     background: transparent !important;
     border: none !important;
-    outline: none !important;
     box-shadow: none !important;
     font-size: 28px;
     cursor: pointer;
-    padding: 0;
     color: var(--text-color) !important; 
     transition: transform 0.3s, color 0.3s;
 }
 
-body.light-mode #clean-settings-btn {
-    color: #0a0a0a !important; 
-}
-
-#clean-settings-btn:hover {
-    transform: rotate(90deg);
-}
+#clean-settings-btn:hover { transform: rotate(90deg); }
+body.light-mode #clean-settings-btn { color: #0a0a0a !important; }
 
 /* ==========================================
-   ۵. استایل منوی تنظیمات
-   ========================================== */
-#clean-settings-sidebar {
-    position: fixed;
-    top: 0;
-    left: -300px;
-    width: 280px;
-    height: 100vh;
-    background: var(--bg-main);
-    border-right: 2px solid var(--accent);
-    color: var(--text-color);
-    z-index: 10000;
-    padding: 20px;
-    box-sizing: border-box;
-    transition: left 0.3s ease;
-    overflow-y: auto;
-}
-
-/* ==========================================
-   ۶. استایل کادر پروفایل
+   ۶. کادر پروفایل
    ========================================== */
 #profile-container {
     position: fixed;
@@ -131,22 +136,7 @@ body.light-mode #clean-settings-btn {
 }
 
 /* ==========================================
-   ۷. اصلاح متن‌های فارسی و ساعت
-   ========================================== */
-[dir="rtl"], .task-title, .task-item {
-    direction: rtl !important;
-    text-align: right !important;
-}
-
-/* تنظیم سایز ساعت که از کادر بیرون نزنه */
-.clock, [class*="time"] {
-    font-size: 4rem !important; 
-    line-height: 1.2 !important;
-    word-break: break-all !important;
-}
-
-/* ==========================================
-   ۸. حالت افقی (کامپیوتر یا گوشی افقی)
+   ۷. حالت افقی
    ========================================== */
 @media (min-width: 600px) {
     #profile-container {
