@@ -22,67 +22,34 @@ body.light-mode {
 body {
     background-color: var(--bg-main) !important;
     color: var(--text-color) !important;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
     transition: background-color 0.3s, color 0.3s;
     touch-action: pan-x pan-y !important; 
 }
 
+div[class*="card"], div[class*="box"], div[class*="container"], form, section {
+    background: var(--bg-card) !important; 
+    border: 1px solid var(--border-color) !important; 
+    border-radius: 15px;
+    color: var(--text-color) !important;
+}
+
 /* ==========================================
-   ۳. استایل اپ‌رپر و نوار دکمه‌ها (مشکل اصلی همین بود!)
+   ۳. دکمه‌ها
    ========================================== */
-.app-wrapper {
-    width: 100%;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.navbar {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 30px;
-    margin-top: 50px;
-}
-
-.nav-btn {
+button:not(#clean-settings-btn), a[href], input[type="submit"], .nav-btn {
     background-color: var(--accent) !important;
     color: #f0e6d2 !important; 
     border: 1px solid var(--accent) !important;
-    padding: 12px 20px;
-    border-radius: 10px;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 16px;
+    border-radius: 8px;
     transition: opacity 0.3s ease !important;
 }
 
-.nav-btn:hover {
+button:not(#clean-settings-btn):hover, a[href]:hover, .nav-btn:hover {
     opacity: 0.8 !important;
 }
 
 /* ==========================================
-   ۴. کادر اصلی (ساعت و تاریخ)
-   ========================================== */
-.dashboard-card {
-    background: var(--bg-card) !important;
-    border-radius: 20px;
-    padding: 40px 20px;
-    text-align: center;
-    margin-bottom: 20px;
-    border: 1px solid var(--border-color) !important;
-}
-
-.greeting { font-size: 2.5rem; margin-bottom: 10px; }
-.clock { font-size: 4rem; font-weight: bold; color: var(--accent); margin: 10px 0; font-family: monospace; }
-.date { font-size: 1.2rem; color: #aaa; margin-bottom: 20px; }
-.quote-box { background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 15px; font-style: italic; color: #ccc; border-left: 4px solid var(--accent); }
-
-/* ==========================================
-   ۵. دکمه چرخ‌دنده
+   ۴. دکمه چرخ‌دنده
    ========================================== */
 #clean-settings-btn {
     position: fixed;
@@ -98,8 +65,33 @@ body {
     transition: transform 0.3s, color 0.3s;
 }
 
-#clean-settings-btn:hover { transform: rotate(90deg); }
-body.light-mode #clean-settings-btn { color: #0a0a0a !important; }
+body.light-mode #clean-settings-btn {
+    color: #0a0a0a !important; 
+}
+
+#clean-settings-btn:hover {
+    transform: rotate(90deg);
+}
+
+/* ==========================================
+   ۵. منوی تنظیمات (مخفی در سمت چپ)
+   ========================================== */
+#clean-settings-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: -350px !important; /* بیرون از صفحه */
+    width: 300px !important;
+    height: 100vh !important;
+    background: var(--bg-main) !important;
+    border-right: 2px solid var(--accent) !important;
+    color: var(--text-color) !important;
+    z-index: 10000 !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+    transition: left 0.3s ease !important;
+    overflow-y: auto !important;
+    box-shadow: 5px 0 20px rgba(0,0,0,0.5);
+}
 
 /* ==========================================
    ۶. کادر پروفایل
@@ -136,7 +128,7 @@ body.light-mode #clean-settings-btn { color: #0a0a0a !important; }
 }
 
 /* ==========================================
-   ۷. حالت افقی
+   ۷. ریسپانسیو
    ========================================== */
 @media (min-width: 600px) {
     #profile-container {
