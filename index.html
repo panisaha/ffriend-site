@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="fa" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dashboard - My Study Planner</title>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <script src="app-loader.js"></script>
     
     <style>
-        /* این استایل‌های داخلی مشکل چیدمان رو حل می‌کنن */
         :root {
-            --bg-main: #050505; --bg-card: #111111;
-            --burgundy-light: #5c0e1b; --cream: #f0e6d2;
+            --bg-main: #050505; 
+            --bg-card: #111111;
+            --burgundy-light: #5c0e1b; 
+            --cream: #f0e6d2;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -28,9 +28,9 @@
         }
         .app-wrapper { width: 100%; max-width: 800px; margin: 0 auto; padding: 20px; }
         
-        .navbar { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; }
+        .navbar { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; margin-top: 50px;}
         .nav-btn { 
-            background-color: var(--bg-card); 
+            background-color: var(--burgundy-light); 
             color: var(--cream); 
             border: none; 
             padding: 12px 20px; 
@@ -43,7 +43,7 @@
             font-size: 16px; 
             transition: 0.3s; 
         }
-        .nav-btn:hover { background-color: var(--burgundy-light); }
+        .nav-btn:hover { opacity: 0.8; }
         
         .dashboard-card { 
             background: linear-gradient(145deg, #151515, #0a0a0a);
