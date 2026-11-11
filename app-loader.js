@@ -45,15 +45,15 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.body.appendChild(sidebar);
 
-    // ۴. باز و بسته کردن منو
+    // ۴. باز و بسته کردن منو (با کلاس open)
     settingsBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        sidebar.style.left = '0px';
+        sidebar.classList.add('open');
     });
     
     document.addEventListener('click', (e) => {
-        if (!sidebar.contains(e.target) && !settingsBtn.contains(e.target) && sidebar.style.left === '0px') {
-            sidebar.style.left = '-350px';
+        if (!sidebar.contains(e.target) && !settingsBtn.contains(e.target)) {
+            sidebar.classList.remove('open');
         }
     });
 
