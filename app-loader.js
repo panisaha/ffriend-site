@@ -1,9 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // این همون متن Base64 هست که عکس کتاب رو توش ذخیره کردیم
     const myImageBase64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjgwIiBmaWxsPSIjMWExYTFhIi8+PHBhdGggZD0iTTE2MCAxNDBsMTYwIDB2MjAwbC0xNjAgMHoiIGZpbGw9IiNmMGU2ZDIiLz48cGF0aCBkPSJNMTYwIDE0MGwtMzAgMHYyMjBsMzAgMHoiIGZpbGw9IiNmMGU2ZDIiLz48cGF0aCBkPSJNMTMwIDM2MGwxNjAgMHYzMGwtMTYwIDB6IiBmaWxsPSIjZjBlNmQyIi8+PC9zdmc+';
 
-    // ۱. ساخت کادر پروفایل
+    // ۱. کادر پروفایل
     const profileBox = document.createElement('div');
     profileBox.id = 'profile-container';
     profileBox.innerHTML = `
@@ -12,18 +11,18 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.body.appendChild(profileBox);
 
-    // ۲. ساخت دکمه چرخ‌دنده
+    // ۲. دکمه چرخ‌دنده
     const settingsBtn = document.createElement('button');
     settingsBtn.innerHTML = '<i class="fas fa-cog"></i>';
     settingsBtn.id = 'clean-settings-btn';
     document.body.appendChild(settingsBtn);
 
-    // ۳. ساخت منوی تنظیمات
+    // ۳. منوی تنظیمات
     const sidebar = document.createElement('div');
     sidebar.id = 'clean-settings-sidebar';
     
     sidebar.innerHTML = `
-        <h2 style="color: var(--accent, #5c0e1b); margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Settings</h2>
+        <h2 style="color: var(--accent); margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Settings</h2>
         
         <h3 style="font-size: 16px; margin-top: 20px;">Account</h3>
         
@@ -38,10 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         <h3 style="font-size: 16px; margin-top: 20px;">Theme</h3>
         <label style="display: flex; align-items: center; margin-bottom: 10px; color: var(--text-color); cursor: pointer;">
-            <input type="radio" name="themeMode" value="light" style="margin-right: 10px; accent-color: var(--accent); width: 18px; height: 18px;"> Day Mode
+            <input type="radio" name="themeMode" value="light" style="margin-right: 10px; accent-color: var(--accent);"> Day Mode
         </label>
         <label style="display: flex; align-items: center; color: var(--text-color); cursor: pointer;">
-            <input type="radio" name="themeMode" value="dark" style="margin-right: 10px; accent-color: var(--accent); width: 18px; height: 18px;" checked> Night Mode
+            <input type="radio" name="themeMode" value="dark" style="margin-right: 10px; accent-color: var(--accent);" checked> Night Mode
         </label>
     `;
     document.body.appendChild(sidebar);
