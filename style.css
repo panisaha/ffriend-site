@@ -22,7 +22,9 @@ body.light-mode {
 body {
     background-color: var(--bg-main) !important;
     color: var(--text-color) !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
     transition: background-color 0.3s, color 0.3s;
+    touch-action: pan-x pan-y !important; /* جلوگیری از زوم */
 }
 
 div[class*="card"], div[class*="box"], div[class*="container"], form, section {
@@ -41,6 +43,7 @@ button:not(#clean-settings-btn), a[href], input[type="submit"], .nav-btn {
     border: 1px solid var(--accent) !important;
     border-radius: 8px;
     transition: opacity 0.3s ease !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
 }
 
 button:not(#clean-settings-btn):hover, a[href]:hover, .nav-btn:hover {
@@ -94,21 +97,21 @@ body.light-mode #clean-settings-btn {
 }
 
 /* ==========================================
-   ۶. استایل کادر پروفایل (هوشمند!)
+   ۶. استایل کادر پروفایل
    ========================================== */
 #profile-container {
     position: fixed;
-    top: 60px; /* زیر چرخ‌دنده */
-    left: 15px; /* هم‌راستا با چرخ‌دنده */
+    bottom: 20px;
+    right: 15px;
     display: flex;
-    flex-direction: column; /* در گوشی عمودی */
+    flex-direction: column;
     align-items: center;
     background: var(--bg-card);
     padding: 6px;
     border-radius: 12px;
     border: 1px solid var(--border-color);
     z-index: 9998;
-    width: 50px; /* باریک‌ترش کردم که روی دکمه‌ها نیفته */
+    width: 50px;
 }
 
 #profile-img {
@@ -121,21 +124,36 @@ body.light-mode #clean-settings-btn {
 }
 
 #profile-name {
-    font-size: 10px; /* فونت کوچیک‌تر */
+    font-size: 10px;
     text-align: center;
     word-break: break-all;
     color: var(--text-color);
 }
 
 /* ==========================================
-   ۷. حالت افقی گوشی یا کامپیوتر (ریسپانسیو)
+   ۷. اصلاح متن‌های فارسی و ساعت
+   ========================================== */
+[dir="rtl"], .task-title, .task-item {
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+/* تنظیم سایز ساعت که از کادر بیرون نزنه */
+.clock, [class*="time"] {
+    font-size: 4rem !important; 
+    line-height: 1.2 !important;
+    word-break: break-all !important;
+}
+
+/* ==========================================
+   ۸. حالت افقی (کامپیوتر یا گوشی افقی)
    ========================================== */
 @media (min-width: 600px) {
     #profile-container {
-        flex-direction: row; /* افقی بشه */
+        flex-direction: row;
         width: auto;
-        top: 15px; /* بره بالا */
-        left: 60px; /* کنار چرخ‌دنده */
+        bottom: 20px; 
+        right: 20px;
         padding: 8px 15px;
         gap: 10px;
     }
