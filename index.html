@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dashboard - My Study Planner</title>
-    
-    <!-- لینک فونت‌آوسام و استایل اصلی -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <script src="app-loader.js"></script>
@@ -13,9 +11,9 @@
 <body>
 
     <div class="app-wrapper">
-        <!-- نوار دکمه‌ها -->
         <div class="navbar">
             <a href="index.html" class="nav-btn active"><i class="fas fa-home"></i> Home</a>
+            <!-- آیکون نوتس اینجا درست شد -->
             <a href="notes.html" class="nav-btn"><i class="fas fa-book"></i> Notes</a>
             <a href="tasks.html" class="nav-btn"><i class="fas fa-tasks"></i> Tasks</a>
             <a href="timer.html" class="nav-btn"><i class="fas fa-clock"></i> Timer</a>
@@ -24,10 +22,8 @@
             <a href="support.html" class="nav-btn"><i class="fas fa-headphones"></i> Support</a>
         </div>
 
-        <!-- کادر اصلی (با کلاس‌های جدید) -->
         <div class="dashboard-card">
             <h1 class="greeting" id="greeting">Good Afternoon!</h1>
-            <!-- ساعت اینجا یه کلاس مخصوص داره تا وسط باشه -->
             <div class="clock" id="clock">00:00:00</div>
             <div class="date" id="date">Loading Date...</div>
             <div class="quote-box" id="quote">
@@ -56,6 +52,5 @@
         setInterval(updateClock, 1000);
         updateClock();
     </script>
-
 </body>
 </html>
