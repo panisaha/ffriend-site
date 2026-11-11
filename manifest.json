@@ -6,17 +6,5 @@
   "display": "standalone",
   "background_color": "#050505",
   "theme_color": "#5c0e1b",
-  "description": "A personal study planner to manage tasks, notes, timer, and alarms.",
-  "icons": [
-    {
-      "src": "icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
+  "description": "A personal study planner to manage tasks, notes, timer, and alarms."
 }
