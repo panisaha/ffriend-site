@@ -4,15 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dashboard - My Study Planner</title>
-    <!-- اضافه کردن آیکون و اطلاعات برای گوگل -->
-<link rel="icon" type="image/png" href="icon-192x192.png">
-<link rel="manifest" href="manifest.json">
-<meta name="author" content="Panisa">
-<meta name="description" content="My Study Planner - A personal dashboard for managing tasks, notes, timer, and alarms. Created by Panisa.">
     
-    <!-- لود کردن FontAwesome (برای آیکون‌ها) و Style.css -->
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.0/css/all.css">
-    <link rel="stylesheet" href="style.css">
+    <!-- لود کردن آیکون‌ها (Font Awesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ================== استایل‌های کلی ================== */
+        :root {
+            --bg-main: #0a0a0a; 
+            --bg-card: #111111;
+            --accent: #5c0e1b; 
+            --text-color: #f0e6d2;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-main); 
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+        .app-wrapper { width: 100%; max-width: 800px; margin: 0 auto; padding: 20px; }
+        
+        /* ================== دکمه‌ها ================== */
+        .navbar { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 30px; margin-top: 60px; }
+        .nav-btn {
+            background-color: var(--accent); color: #f0e6d2;
+            padding: 12px 20px; border-radius: 10px; text-decoration: none;
+            display: flex; align-items: center; gap: 8px; font-size: 16px; transition: 0.3s;
+        }
+        .nav-btn:hover { opacity: 0.8; }
+        
+        /* ================== کادر اصلی ================== */
+        .dashboard-card {
+            background: var(--bg-card); border-radius: 20px; padding: 40px 20px;
+            text-align: center; border: 1px solid rgba(139,0,0,0.3);
+        }
+        .greeting { font-size: 2.5rem; margin-bottom: 10px; }
+        
+        /* ساعت: وسط‌چین */
+        .clock { 
+            font-size: 3.5rem; 
+            font-weight: bold; 
+            color: var(--accent); 
+            margin: 15px auto; 
+            font-family: 'Segoe UI', sans-serif; 
+            display: block; 
+            text-align: center; 
+        }
+        
+        .date { font-size: 1.2rem; color: #aaa; margin-bottom: 20px; }
+        .quote-box { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; font-style: italic; color: #ccc; border-left: 4px solid var(--accent); }
+
+        /* ================== دکمه تنظیمات ================== */
+        #clean-settings-btn {
+            position: fixed; top: 15px; left: 15px; z-index: 9999;
+            background: transparent; border: none; font-size: 28px;
+            color: var(--text-color); cursor: pointer; transition: transform 0.3s;
+        }
+        #clean-settings-btn:hover { transform: rotate(90deg); }
+    </style>
 </head>
 <body>
 
@@ -38,7 +88,7 @@
     </div>
 
     <script>
-        // ================== اسکریپت ساعت ==================
+        // ================== اسکریپت ساعت و زمان‌بندی ==================
         function updateClock() {
             const now = new Date();
             const hours = String(now.getHours()).padStart(2, '0');
@@ -50,69 +100,36 @@
             document.getElementById('date').innerText = now.toLocaleDateString('en-US', options);
 
             const hour = now.getHours();
-            let greeting = "Good Evening!";
-            if (hour < 12) greeting = "Good Morning!";
-            else if (hour < 18) greeting = "Good Afternoon!";
+            let greeting = "";
+
+            // زمان‌بندی دقیقی که خودت خواستی:
+            if (hour >= 3 && hour < 12) {
+                greeting = "Good Morning!"; // ۳ صبح تا ۱۲ ظهر
+            } else if (hour >= 12 && hour < 16) {
+                greeting = "Good Afternoon!"; // ۱۲ ظهر تا ۴ عصر
+            } else if (hour >= 16 && hour < 19) {
+                greeting = "Good Evening!"; // ۴ عصر تا ۷ شب
+            } else {
+                greeting = "Good Night!"; // ۷ شب تا ۳ صبح
+            }
+            
             document.getElementById('greeting').innerText = greeting;
         }
         setInterval(updateClock, 1000);
         updateClock();
 
-        // ================== پروفایل ==================
+        // ================== کدهای پروفایل و تنظیمات ==================
         const myImageBase64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjgwIiBmaWxsPSIjMWExYTFhIi8+PHBhdGggZD0iTTE2MCAxNDBsMTYwIDB2MjAwbC0xNjAgMHoiIGZpbGw9IiNmMGU2ZDIiLz48cGF0aCBkPSJNMTYwIDE0MGwtMzAgMHYyMjBsMzAgMHoiIGZpbGw9IiNmMGU2ZDIiLz48cGF0aCBkPSJNMTMwIDM2MGwxNjAgMHYzMGwtMTYwIDB6IiBmaWxsPSIjZjBlNmQyIi8+PC9zdmc+';
 
         const profileBox = document.createElement('div');
-        profileBox.id = 'profile-container';
-        profileBox.innerHTML = `
-            <img id="profile-img" src="${myImageBase64}" alt="Profile">
-            <span id="profile-name">User</span>
-        `;
+        profileBox.style.cssText = 'position:fixed; bottom:20px; right:15px; display:flex; flex-direction:column; align-items:center; background:#111; padding:6px; border-radius:12px; border:1px solid #5c0e1b; z-index:9998; width:50px;';
+        profileBox.innerHTML = `<img id="profile-img" src="${myImageBase64}" style="width:30px; height:30px; border-radius:50%; margin-bottom:4px; border:2px solid #5c0e1b;"><span id="profile-name" style="font-size:10px; color:#f0e6d2;">User</span>`;
         document.body.appendChild(profileBox);
 
-        // ================== دکمه تنظیمات و منو ==================
         const settingsBtn = document.createElement('button');
         settingsBtn.innerHTML = '<i class="fas fa-cog"></i>';
         settingsBtn.id = 'clean-settings-btn';
         document.body.appendChild(settingsBtn);
-
-        // ساخت منوی تنظیمات
-        const sidebar = document.createElement('div');
-        sidebar.id = 'clean-settings-sidebar';
-        sidebar.innerHTML = `
-            <h2 style="color: var(--accent); border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-top: 0;">Settings</h2>
-            <h3 style="margin-top: 20px;">Account</h3>
-            <input type="text" placeholder="Your Name" id="usernameInput" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-color); box-sizing: border-box;">
-            <button id="saveNameBtn" style="width: 100%; padding: 10px; border-radius: 8px; background: var(--accent); color: #f0e6d2; border: none; cursor: pointer;">Change Account</button>
-            <h3 style="margin-top: 20px;">Theme</h3>
-            <label style="display: flex; align-items: center; margin-bottom: 10px; cursor: pointer; color: var(--text-color);"><input type="radio" name="themeMode" value="light" style="margin-right: 10px;"> Day Mode</label>
-            <label style="display: flex; align-items: center; cursor: pointer; color: var(--text-color);"><input type="radio" name="themeMode" value="dark" style="margin-right: 10px;" checked> Night Mode</label>
-        `;
-        document.body.appendChild(sidebar);
-
-        // باز و بسته کردن منو
-        settingsBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            sidebar.classList.add('open');
-        });
-        
-        document.addEventListener('click', (e) => {
-            if (!sidebar.contains(e.target) && !settingsBtn.contains(e.target)) {
-                sidebar.classList.remove('open');
-            }
-        });
-
-        // مدیریت اسم
-        const nameInp = document.getElementById('usernameInput');
-        const nameDisplay = document.getElementById('profile-name');
-        const savedName = localStorage.getItem('userName') || 'User';
-        nameInp.value = savedName;
-        nameDisplay.innerText = savedName;
-
-        document.getElementById('saveNameBtn').addEventListener('click', () => {
-            const newName = nameInp.value || 'User';
-            localStorage.setItem('userName', newName);
-            nameDisplay.innerText = newName;
-        });
     </script>
 </body>
 </html>
