@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dashboard - My Study Planner</title>
+    
+    <!-- لود کردن FontAwesome و Style.css برای درست شدن آیکون‌ها و فونت -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    
     <style>
         /* ================== استایل‌های کلی ================== */
         :root {
@@ -15,7 +19,7 @@
         body {
             background-color: var(--bg-main); color: var(--text-color);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow-x: hidden; /* جلوگیری از اسکرول افقی */
+            overflow-x: hidden;
         }
         .app-wrapper { width: 100%; max-width: 800px; margin: 0 auto; padding: 20px; }
         
@@ -34,7 +38,18 @@
             text-align: center; border: 1px solid rgba(139,0,0,0.3);
         }
         .greeting { font-size: 2.5rem; margin-bottom: 10px; }
-        .clock { font-size: 4rem; font-weight: bold; color: var(--accent); margin: 10px auto; font-family: monospace; display: block; }
+        
+        /* ساعت اینجا دقیقاً وسط‌چین شد و سایزش تنظیم شد که توی کادر جا بشه */
+        .clock { 
+            font-size: 3.5rem; 
+            font-weight: bold; 
+            color: var(--accent); 
+            margin: 15px auto; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            display: block; 
+            text-align: center; 
+        }
+        
         .date { font-size: 1.2rem; color: #aaa; margin-bottom: 20px; }
         .quote-box { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; font-style: italic; color: #ccc; border-left: 4px solid var(--accent); }
 
@@ -52,6 +67,7 @@
     <div class="app-wrapper">
         <div class="navbar">
             <a href="index.html" class="nav-btn active"><i class="fas fa-home"></i> Home</a>
+            <!-- آیکون نوتس اینجا دقیقاً fa-book (کتاب) تنظیم شده -->
             <a href="notes.html" class="nav-btn"><i class="fas fa-book"></i> Notes</a>
             <a href="tasks.html" class="nav-btn"><i class="fas fa-tasks"></i> Tasks</a>
             <a href="timer.html" class="nav-btn"><i class="fas fa-clock"></i> Timer</a>
