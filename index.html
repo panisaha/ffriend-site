@@ -4,82 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - My Study Planner</title>
-    <meta name="google-site-verification" content="ZclbFkUR-CztJ-Q4Cfj-p5JtEcJDMeq5qZ9HvdMyyCY" />
-    <link rel="icon" type="image/png" href="icon-192x192.png">
+    <!-- خط rel="icon" کاملاً حذف شد تا گوگل دیگه ارور نده -->
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <script src="app-loader.js"></script>
+    
     <style>
         :root {
-            --bg-main: #050505; --bg-card: #111111; --burgundy-dark: #2a050a;
-            --burgundy-light: #5c0e1b; --cream: #e8e0d0; --beige: #a89b8c; --hanai: #7a3e28;
+            --bg-main: #050505; 
+            --bg-card: #111111;
+            --burgundy-light: #5c0e1b; 
+            --cream: #f0e6d2;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-main); color: var(--cream); display: flex; justify-content: center; min-height: 100vh; padding: 20px; }
-        .app-wrapper { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 30px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg-main); color: var(--cream); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .app-wrapper { width: 100%; max-width: 900px; margin: 0 auto; padding: 20px; }
         
-        .navbar { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
-        .nav-btn { background-color: var(--bg-card); color: var(--beige); text-decoration: none; padding: 12px 25px; border-radius: 12px; border: 1px solid var(--burgundy-dark); display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 1rem; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        .nav-btn:hover { background-color: var(--burgundy-dark); color: var(--cream); transform: translateY(-3px); }
-        .nav-btn.active { background-color: var(--burgundy-light); color: var(--cream); border-color: var(--cream); box-shadow: 0 0 15px rgba(92, 14, 27, 0.6); }
+        .navbar { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; margin-top: 50px; }
+        .nav-btn { background-color: var(--burgundy-light); color: var(--cream); border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 8px; font-size: 16px; transition: 0.3s; }
+        .nav-btn:hover { background-color: #8b0000; }
         
-        .dashboard-card { background: linear-gradient(135deg, #0a0a0a, #140508); border: 1px solid var(--burgundy-dark); border-radius: 24px; padding: 50px 20px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.9); position: relative; overflow: hidden; }
-        .dashboard-card::before { content: ''; position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(92,14,27,0.3) 0%, transparent 70%); }
-        
-        .greeting { font-size: 2.5rem; color: var(--cream); margin-bottom: 10px; font-weight: bold; }
-        .clock { font-size: 4rem; color: var(--burgundy-light); font-weight: bold; margin: 20px 0; text-shadow: 0 0 30px rgba(92,14,27,0.6); letter-spacing: 2px; }
-        .date { font-size: 1.2rem; color: var(--beige); margin-bottom: 30px; }
-        .quote-box { background-color: rgba(0,0,0,0.6); border-right: 4px solid var(--cream); padding: 20px; border-radius: 12px; font-style: italic; color: var(--beige); margin-top: 30px; font-size: 1.1rem; }
+        .dashboard-card { background: var(--bg-card); border-radius: 20px; padding: 40px 20px; text-align: center; margin-bottom: 20px; box-shadow: 0 0 20px rgba(139, 0, 0, 0.2); border: 1px solid #333; }
+        .greeting { font-size: 2rem; margin-bottom: 10px; color: var(--cream); }
+        .clock { font-size: 5rem; font-weight: bold; color: var(--burgundy-light); margin: 10px 0; font-family: monospace; }
+        .date { font-size: 1.2rem; color: #aaa; margin-bottom: 20px; }
+        .quote-box { background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 15px; font-style: italic; color: #ccc; border-left: 4px solid var(--burgundy-light); }
     </style>
 </head>
 <body>
 
-<div class="app-wrapper">
-    <!-- منوی ناوبری (همه لینک‌ها به index.html اشاره می‌کنن) -->
-    <nav class="navbar">
-        <a href="index.html" class="nav-btn active"><i class="fa-solid fa-house"></i> Home</a>
-        <a href="notes.html" class="nav-btn"><i class="fa-solid fa-book-open"></i> Notes</a>
-        <a href="tasks.html" class="nav-btn"><i class="fa-solid fa-list-check"></i> Tasks</a>
-        <a href="timer.html" class="nav-btn"><i class="fa-solid fa-clock"></i> Timer</a>
-        <a href="links.html" class="nav-btn"><i class="fa-solid fa-link"></i> Links</a>
-        <a href="alarm.html" class="nav-btn"><i class="fa-solid fa-bell"></i> Alarm</a>
-        <a href="support.html" class="nav-btn"><i class="fa-solid fa-headset"></i> Support</a>
-    </nav>
+    <div class="app-wrapper">
+        <!-- نوار دکمه‌ها -->
+        <div class="navbar">
+            <a href="index.html" class="nav-btn active"><i class="fas fa-home"></i> Home</a>
+            <a href="notes.html" class="nav-btn"><i class="fas fa-book"></i> Notes</a>
+            <a href="tasks.html" class="nav-btn"><i class="fas fa-tasks"></i> Tasks</a>
+            <a href="timer.html" class="nav-btn"><i class="fas fa-clock"></i> Timer</a>
+            <a href="links.html" class="nav-btn"><i class="fas fa-link"></i> Links</a>
+            <a href="alarm.html" class="nav-btn"><i class="fas fa-bell"></i> Alarm</a>
+            <a href="support.html" class="nav-btn"><i class="fas fa-headphones"></i> Support</a>
+        </div>
 
-    <div class="dashboard-card">
-        <div class="greeting" id="greeting">Welcome Back!</div>
-        <div class="clock" id="clock">00:00:00</div>
-        <div class="date" id="date">Loading date...</div>
-        <div class="quote-box" id="quote">"The secret of getting ahead is getting started."</div>
+        <!-- کادر اصلی -->
+        <div class="dashboard-card">
+            <h1 class="greeting" id="greeting">Good Morning!</h1>
+            <div class="clock" id="clock">00:00:00</div>
+            <div class="date" id="date">Loading Date...</div>
+            <div class="quote-box" id="quote">
+                "The secret of getting ahead is getting started."
+            </div>
+        </div>
     </div>
-</div>
 
-<script>
-    function updateTime() {
-        const now = new Date();
-        document.getElementById('clock').innerText = now.toLocaleTimeString('en-US', { hour12: false });
+    <script>
+        // اسکریپت ساعت و تاریخ
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('clock').innerText = `${hours}:${minutes}:${seconds}`;
+
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('date').innerText = now.toLocaleDateString('en-US', options);
+
+            const hour = now.getHours();
+            let greeting = "Good Evening!";
+            if (hour < 12) greeting = "Good Morning!";
+            else if (hour < 18) greeting = "Good Afternoon!";
+            document.getElementById('greeting').innerText = greeting;
+        }
         
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById('date').innerText = now.toLocaleDateString('en-US', options);
-
-        const hour = now.getHours();
-        let greeting = "Welcome Back!";
-        if (hour < 12) greeting = "Good Morning!";
-        else if (hour < 18) greeting = "Good Afternoon!";
-        else greeting = "Good Evening!";
-        document.getElementById('greeting').innerText = greeting;
-    }
-    setInterval(updateTime, 1000); 
-    updateTime();
-
-    const quotes = [
-        "The secret of getting ahead is getting started.",
-        "It always seems impossible until it's done.",
-        "Don't watch the clock; do what it does. Keep going.",
-        "Believe you can and you're halfway there."
-    ];
-    document.getElementById('quote').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
-</script>
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
 
 </body>
 </html>
