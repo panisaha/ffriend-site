@@ -8,11 +8,60 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <script src="app-loader.js"></script>
+    
+    <style>
+        /* این استایل‌های داخلی مشکل چیدمان رو حل می‌کنن */
+        :root {
+            --bg-main: #050505; --bg-card: #111111;
+            --burgundy-light: #5c0e1b; --cream: #f0e6d2;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background-color: var(--bg-main); 
+            color: var(--cream); 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            min-height: 100vh; 
+            flex-direction: column; 
+            gap: 20px; 
+        }
+        .app-wrapper { width: 100%; max-width: 800px; margin: 0 auto; padding: 20px; }
+        
+        .navbar { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; }
+        .nav-btn { 
+            background-color: var(--bg-card); 
+            color: var(--cream); 
+            border: none; 
+            padding: 12px 20px; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            text-decoration: none; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            font-size: 16px; 
+            transition: 0.3s; 
+        }
+        .nav-btn:hover { background-color: var(--burgundy-light); }
+        
+        .dashboard-card { 
+            background: linear-gradient(145deg, #151515, #0a0a0a);
+            border-radius: 20px; 
+            padding: 40px 20px; 
+            text-align: center; 
+            border: 1px solid rgba(92, 14, 27, 0.3);
+            box-shadow: 0 0 30px rgba(92, 14, 27, 0.1);
+        }
+        .greeting { font-size: 2.5rem; margin-bottom: 10px; color: var(--cream); }
+        .clock { font-size: 4rem; font-weight: bold; color: var(--burgundy-light); margin: 10px 0; font-family: monospace; }
+        .date { font-size: 1.2rem; color: #888; margin-bottom: 20px; }
+        .quote-box { background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 15px; font-style: italic; color: #aaa; border-left: 4px solid var(--burgundy-light); }
+    </style>
 </head>
 <body>
 
     <div class="app-wrapper">
-        <!-- نوار دکمه‌ها (دقیقاً مثل بقیه تب‌ها) -->
         <div class="navbar">
             <a href="index.html" class="nav-btn active"><i class="fas fa-home"></i> Home</a>
             <a href="notes.html" class="nav-btn"><i class="fas fa-book"></i> Notes</a>
@@ -23,9 +72,8 @@
             <a href="support.html" class="nav-btn"><i class="fas fa-headphones"></i> Support</a>
         </div>
 
-        <!-- کادر اصلی -->
         <div class="dashboard-card">
-            <h1 class="greeting" id="greeting">Good Morning!</h1>
+            <h1 class="greeting" id="greeting">Good Afternoon!</h1>
             <div class="clock" id="clock">00:00:00</div>
             <div class="date" id="date">Loading Date...</div>
             <div class="quote-box" id="quote">
@@ -51,10 +99,8 @@
             else if (hour < 18) greeting = "Good Afternoon!";
             document.getElementById('greeting').innerText = greeting;
         }
-        
         setInterval(updateClock, 1000);
         updateClock();
     </script>
-
 </body>
 </html>
