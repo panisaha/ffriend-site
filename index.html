@@ -4,59 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dashboard - My Study Planner</title>
+    
+    <!-- لینک فونت‌آوسام و استایل اصلی -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <script src="app-loader.js"></script>
-
-    <!-- این استایل‌های نجات‌بخش اضافه شد تا حتی اگه style.css دیر لود بشه، صفحه لخت نشه -->
-    <style>
-        body { 
-            background-color: #0a0a0a; 
-            color: #f0e6d2; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            margin: 0; 
-            padding: 0;
-        }
-        .app-wrapper { 
-            max-width: 800px; 
-            margin: 0 auto; 
-            padding: 20px; 
-        }
-        .navbar { 
-            display: flex; 
-            flex-wrap: wrap; 
-            gap: 10px; 
-            justify-content: center; 
-            margin-bottom: 30px; 
-            margin-top: 50px;
-        }
-        .nav-btn { 
-            background-color: #5c0e1b; 
-            color: #f0e6d2; 
-            padding: 12px 20px; 
-            border-radius: 10px; 
-            text-decoration: none; 
-            display: flex; 
-            align-items: center; 
-            gap: 8px; 
-            font-size: 16px;
-        }
-        .dashboard-card { 
-            background: #111; 
-            border-radius: 20px; 
-            padding: 40px 20px; 
-            text-align: center;
-            border: 1px solid rgba(139, 0, 0, 0.3); 
-        }
-        .greeting { font-size: 2.5rem; margin-bottom: 10px; color: #f0e6d2; }
-        .clock { font-size: 4rem; font-weight: bold; color: #5c0e1b; margin: 10px 0; font-family: monospace; }
-        .date { font-size: 1.2rem; color: #888; margin-bottom: 20px; }
-        .quote-box { background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 15px; font-style: italic; color: #aaa; border-left: 4px solid #5c0e1b; }
-    </style>
 </head>
 <body>
 
     <div class="app-wrapper">
+        <!-- نوار دکمه‌ها -->
         <div class="navbar">
             <a href="index.html" class="nav-btn active"><i class="fas fa-home"></i> Home</a>
             <a href="notes.html" class="nav-btn"><i class="fas fa-book"></i> Notes</a>
@@ -67,8 +24,10 @@
             <a href="support.html" class="nav-btn"><i class="fas fa-headphones"></i> Support</a>
         </div>
 
+        <!-- کادر اصلی (با کلاس‌های جدید) -->
         <div class="dashboard-card">
             <h1 class="greeting" id="greeting">Good Afternoon!</h1>
+            <!-- ساعت اینجا یه کلاس مخصوص داره تا وسط باشه -->
             <div class="clock" id="clock">00:00:00</div>
             <div class="date" id="date">Loading Date...</div>
             <div class="quote-box" id="quote">
@@ -97,5 +56,6 @@
         setInterval(updateClock, 1000);
         updateClock();
     </script>
+
 </body>
 </html>
