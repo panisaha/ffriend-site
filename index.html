@@ -1,134 +1,85 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="fa" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - My Study Planner</title>
-    
-    <!-- لود کردن فونت‌آوسام و فونت اصلی -->
+    <meta name="google-site-verification" content="ZclbFkUR-CztJ-Q4Cfj-p5JtEcJDMeq5qZ9HvdMyyCY" />
+    <link rel="icon" type="image/png" href="icon-192x192.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <script src="app-loader.js"></script>
     
     <style>
-        /* ================== استایل‌های کلی ================== */
         :root {
-            --bg-main: #0a0a0a; --bg-card: #111111;
-            --accent: #5c0e1b; --text-color: #f0e6d2;
+            --bg-main: #050505; --bg-card: #111111; --burgundy-dark: #2a050a;
+            --burgundy-light: #5c0e1b; --cream: #e8e0d0; --beige: #a89b8c; --hanai: #7a3e28;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            background-color: var(--bg-main); color: var(--text-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow-x: hidden;
-        }
-        .app-wrapper { width: 100%; max-width: 800px; margin: 0 auto; padding: 20px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--cream); display: flex; justify-content: center; min-height: 100vh; padding: 20px; }
+        .app-wrapper { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 30px; }
         
-        /* ================== دکمه‌ها ================== */
-        .navbar { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 30px; margin-top: 60px; }
-        .nav-btn {
-            background-color: var(--accent); color: #f0e6d2;
-            padding: 12px 20px; border-radius: 12px; text-decoration: none;
-            display: flex; align-items: center; gap: 8px; font-size: 16px; transition: 0.3s;
-        }
-        .nav-btn:hover { opacity: 0.8; }
+        .navbar { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .nav-btn { background-color: var(--bg-card); color: var(--beige); text-decoration: none; padding: 12px 25px; border-radius: 12px; border: 1px solid var(--burgundy-dark); display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 1rem; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .nav-btn:hover { background-color: var(--burgundy-dark); color: var(--cream); transform: translateY(-3px); }
+        .nav-btn.active { background-color: var(--burgundy-light); color: var(--cream); border-color: var(--cream); box-shadow: 0 0 15px rgba(92, 14, 27, 0.6); }
         
-        /* ================== کادر اصلی ================== */
-        .dashboard-card {
-            background: var(--bg-card); border-radius: 20px; padding: 40px 20px;
-            text-align: center; border: 1px solid rgba(139,0,0,0.3);
-        }
-        .greeting { font-size: 2.5rem; margin-bottom: 10px; }
-        .clock { font-size: 3.5rem; font-weight: bold; color: var(--accent); margin: 15px auto; display: block; text-align: center; }
-        .date { font-size: 1.2rem; color: #aaa; margin-bottom: 20px; }
-        .quote-box { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; font-style: italic; color: #ccc; border-left: 4px solid var(--accent); }
-
-        /* ================== دکمه تنظیمات (فقط استایل) ================== */
-        #clean-settings-btn {
-            position: fixed; top: 15px; left: 15px; z-index: 9999;
-            background: transparent; border: none; font-size: 28px;
-            color: var(--text-color); cursor: pointer; transition: transform 0.3s;
-        }
-        #clean-settings-btn:hover { transform: rotate(90deg); }
+        .dashboard-card { background: linear-gradient(135deg, #0a0a0a, #140508); border: 1px solid var(--burgundy-dark); border-radius: 24px; padding: 50px 20px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.9); position: relative; overflow: hidden; }
+        .dashboard-card::before { content: ''; position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(92,14,27,0.3) 0%, transparent 70%); }
+        
+        .greeting { font-size: 2.5rem; color: var(--cream); margin-bottom: 10px; font-weight: bold; }
+        .clock { font-size: 4rem; color: var(--burgundy-light); font-weight: bold; margin: 20px 0; text-shadow: 0 0 30px rgba(92,14,27,0.6); letter-spacing: 2px; }
+        .date { font-size: 1.2rem; color: var(--beige); margin-bottom: 30px; }
+        .quote-box { background-color: rgba(0,0,0,0.6); border-right: 4px solid var(--cream); padding: 20px; border-radius: 12px; font-style: italic; color: var(--beige); margin-top: 30px; font-size: 1.1rem; }
     </style>
 </head>
 <body>
 
-    <div class="app-wrapper">
-        <div class="navbar">
-            <a href="index.html" class="nav-btn active"><i class="fas fa-home"></i> Home</a>
-            <!-- آیکون کتاب باز برای نوتس 👇 -->
-            <a href="notes.html" class="nav-btn"><i class="fas fa-book-open"></i> Notes</a>
-            <a href="tasks.html" class="nav-btn"><i class="fas fa-tasks"></i> Tasks</a>
-            <a href="timer.html" class="nav-btn"><i class="fas fa-clock"></i> Timer</a>
-            <a href="links.html" class="nav-btn"><i class="fas fa-link"></i> Links</a>
-            <a href="alarm.html" class="nav-btn"><i class="fas fa-bell"></i> Alarm</a>
-            <!-- آیکون هدفون خطی برای ساپورت 👇 -->
-            <a href="support.html" class="nav-btn"><i class="fas fa-headset"></i> Support</a>
-        </div>
+<div class="app-wrapper">
+    <nav class="navbar">
+        <a href="index.html" class="nav-btn active"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="notes.html" class="nav-btn"><i class="fa-solid fa-book-open"></i> Notes</a>
+        <a href="tasks.html" class="nav-btn"><i class="fa-solid fa-list-check"></i> Tasks</a>
+        <a href="timer.html" class="nav-btn"><i class="fa-solid fa-clock"></i> Timer</a>
+        <a href="links.html" class="nav-btn"><i class="fa-solid fa-link"></i> Links</a>
+        <a href="alarm.html" class="nav-btn"><i class="fa-solid fa-bell"></i> Alarm</a>
+        <a href="support.html" class="nav-btn"><i class="fa-solid fa-headset"></i> Support</a>
+    </nav>
 
-        <div class="dashboard-card">
-            <h1 class="greeting" id="greeting">Good Afternoon!</h1>
-            <div class="clock" id="clock">00:00:00</div>
-            <div class="date" id="date">Loading Date...</div>
-            <div class="quote-box" id="quote">
-                "The secret of getting ahead is getting started."
-            </div>
-        </div>
+    <div class="dashboard-card">
+        <div class="greeting" id="greeting">Welcome Back!</div>
+        <div class="clock" id="clock">00:00:00</div>
+        <div class="date" id="date">Loading date...</div>
+        <div class="quote-box" id="quote">"The secret of getting ahead is getting started."</div>
     </div>
+</div>
 
-    <script>
-        // ================== اسکریپت ساعت ==================
-        function updateClock() {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            document.getElementById('clock').innerText = `${hours}:${minutes}:${seconds}`;
+<script>
+    function updateTime() {
+        const now = new Date();
+        document.getElementById('clock').innerText = now.toLocaleTimeString('en-US', { hour12: false });
+        
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('date').innerText = now.toLocaleDateString('en-US', options);
 
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('date').innerText = now.toLocaleDateString('en-US', options);
+        const hour = now.getHours();
+        let greeting = "Welcome Back!";
+        if (hour < 12) greeting = "Good Morning!";
+        else if (hour < 18) greeting = "Good Afternoon!";
+        else greeting = "Good Evening!";
+        document.getElementById('greeting').innerText = greeting;
+    }
+    setInterval(updateTime, 1000); 
+    updateTime();
 
-            const hour = now.getHours();
-            let greeting = "";
-            if (hour >= 3 && hour < 12) greeting = "Good Morning!";
-            else if (hour >= 12 && hour < 16) greeting = "Good Afternoon!";
-            else if (hour >= 16 && hour < 19) greeting = "Good Evening!";
-            else greeting = "Good Night!";
-            
-            document.getElementById('greeting').innerText = greeting;
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
+    const quotes = [
+        "The secret of getting ahead is getting started.",
+        "It always seems impossible until it's done.",
+        "Don't watch the clock; do what it does. Keep going.",
+        "Believe you can and you're halfway there."
+    ];
+    document.getElementById('quote').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+</script>
 
-        // ================== کدهای پروفایل و تنظیمات ==================
-        const myImageBase64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjgwIiBmaWxsPSIjMWExYTFhIi8+PHBhdGggZD0iTTE2MCAxNDBsMTYwIDB2MjAwbC0xNjAgMHoiIGZpbGw9IiNmMGU2ZDIiLz48cGF0aCBkPSJNMTYwIDE0MGwtMzAgMHYyMjBsMzAgMHoiIGZpbGw9IiNmMGU2ZDIiLz48cGF0aCBkPSJNMTMwIDM2MGwxNjAgMHYzMGwtMTYwIDB6IiBmaWxsPSIjZjBlNmQyIi8+PC9zdmc+';
-
-        const profileBox = document.createElement('div');
-        profileBox.style.cssText = 'position:fixed; bottom:20px; right:15px; display:flex; flex-direction:column; align-items:center; background:#111; padding:6px; border-radius:12px; border:1px solid #5c0e1b; z-index:9998; width:50px;';
-        profileBox.innerHTML = `<img id="profile-img" src="${myImageBase64}" style="width:30px; height:30px; border-radius:50%; margin-bottom:4px; border:2px solid #5c0e1b;"><span id="profile-name" style="font-size:10px; color:#f0e6d2;">User</span>`;
-        document.body.appendChild(profileBox);
-
-        // ================== دکمه تنظیمات و منو ==================
-        const settingsBtn = document.createElement('button');
-        settingsBtn.innerHTML = '<i class="fas fa-cog"></i>';
-        settingsBtn.id = 'clean-settings-btn';
-        document.body.appendChild(settingsBtn);
-
-        const sidebar = document.createElement('div');
-        sidebar.id = 'clean-settings-sidebar';
-        sidebar.style.cssText = 'position:fixed; top:0; left:-350px; width:280px; height:100vh; background:#111; border-right:2px solid #5c0e1b; z-index:10000; padding:20px; transition:left 0.3s; color:#f0e6d2;';
-        sidebar.innerHTML = `<h2>Settings</h2><p>تنظیمات اینجا قرار می‌گیره...</p>`;
-        document.body.appendChild(sidebar);
-
-        settingsBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            sidebar.style.left = '0px';
-        });
-        document.addEventListener('click', (e) => {
-            if (!sidebar.contains(e.target) && !settingsBtn.contains(e.target)) {
-                sidebar.style.left = '-350px';
-            }
-        });
-    </script>
 </body>
 </html>
