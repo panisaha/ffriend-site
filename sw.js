@@ -1,20 +1,17 @@
-const CACHE_NAME = 'myplanner-v1';
+const CACHE_NAME = 'my-planner-v1';
 const ASSETS = [
   './',
   './index.html',
-  './style.css',
-  './tasks.html',
   './notes.html',
+  './tasks.html',
   './timer.html',
-  './alarm.html',
   './links.html',
+  './alarm.html',
   './support.html',
-  './manifest.json',
-  './icon-192x192.png',
-  './icon-512x512.png'
+  './style.css'
 ];
 
-// نصب اپ و ذخیره فایل‌ها
+// نصب و ذخیره فایل‌ها
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
