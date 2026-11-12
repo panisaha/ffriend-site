@@ -1,136 +1,69 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="fa" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alarm - My Study Planner</title>
-    <link rel="icon" type="image/png" href="icon-192x192.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    <script src="app-loader.js"></script>
     <style>
         :root {
             --bg-main: #050505; --bg-card: #111111; --burgundy-dark: #2a050a;
-            --burgundy-light: #5c0e1b; --cream: #e8e0d0; --beige: #a89b8c; --hanai: #7a3e28;
+            --burgundy-light: #5c0e1b; --cream: #e8e0d0; --beige: #a89b8c;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-main); color: var(--cream); display: flex; justify-content: center; min-height: 100vh; padding: 20px; unicode-bidi: plaintext; text-align: start; }
-        
-        .app-wrapper { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 20px; }
-
-        .navbar { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; }
-        .nav-btn {
-            background-color: var(--bg-card); color: var(--beige); text-decoration: none;
-            padding: 10px 20px; border-radius: 12px; border: 1px solid var(--burgundy-dark);
-            display: flex; align-items: center; gap: 8px; font-weight: bold; transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        body { 
+            background-color: var(--bg-main); 
+            color: var(--cream); 
+            display: flex; 
+            justify-content: center; 
+            min-height: 100vh; 
+            padding: 20px;
+            flex-direction: column;
+            align-items: center;
         }
-        .nav-btn:hover { background-color: var(--burgundy-dark); color: var(--cream); transform: translateY(-2px); }
+        
+        .app-wrapper { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 30px; }
+        
+        .navbar { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 20px;}
+        .nav-btn { background-color: var(--bg-card); color: var(--beige); text-decoration: none; padding: 12px 20px; border-radius: 12px; border: 1px solid var(--burgundy-dark); display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 1rem; transition: all 0.3s ease; }
+        .nav-btn:hover { background-color: var(--burgundy-dark); color: var(--cream); }
         .nav-btn.active { background-color: var(--burgundy-light); color: var(--cream); border-color: var(--cream); box-shadow: 0 0 15px rgba(92, 14, 27, 0.6); }
 
+        .page-title { font-size: 2rem; color: var(--burgundy-light); text-align: center; margin-bottom: 20px; font-weight: bold; }
+        
+        .alarm-card { 
+            background: linear-gradient(135deg, #0a0a0a, #140508); 
+            border: 1px solid var(--burgundy-dark); 
+            border-radius: 24px; 
+            padding: 40px 20px; 
+            text-align: center; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.9);
+        }
+
         .add-alarm-btn {
-            background-color: var(--burgundy-light); color: var(--cream);
-            border: 1px solid var(--burgundy-dark); padding: 15px;
-            border-radius: 15px; font-size: 1.1rem; font-weight: bold;
-            cursor: pointer; transition: 0.3s; display: flex;
-            justify-content: center; align-items: center; gap: 10px;
-            box-shadow: 0 5px 15px rgba(92,14,27,0.4);
+            background-color: var(--burgundy-light);
+            color: var(--cream);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            transition: 0.3s;
         }
-        .add-alarm-btn:hover { background-color: var(--burgundy-dark); transform: translateY(-3px); }
+        .add-alarm-btn:hover { background-color: var(--burgundy-dark); transform: translateY(-2px); }
 
-        .alarms-list { display: flex; flex-direction: column; gap: 15px; }
-        
-        .alarm-card {
-            background-color: var(--bg-card); border: 1px solid var(--burgundy-dark);
-            padding: 20px; border-radius: 15px; display: flex;
-            justify-content: space-between; align-items: center;
-            transition: 0.3s; border-left: 5px solid var(--hanai);
-        }
-        .alarm-card:hover { background-color: #1a1a1a; }
-        
-        .alarm-info { display: flex; flex-direction: column; gap: 5px; }
-        .alarm-time-display { font-size: 2rem; font-weight: bold; color: var(--cream); }
-        .alarm-title-display { font-size: 1rem; color: var(--burgundy-light); font-weight: bold; }
-        .alarm-days-display { font-size: 0.8rem; color: var(--beige); }
-
-        .delete-alarm-btn { background: none; border: none; color: var(--burgundy-light); font-size: 1.5rem; cursor: pointer; transition: 0.3s; padding: 10px; }
-        .delete-alarm-btn:hover { color: red; transform: scale(1.2); }
-
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px);
-            z-index: 1000; justify-content: center; align-items: center;
-        }
-        .modal-box {
-            background-color: var(--bg-card); border: 1px solid var(--burgundy-light);
-            padding: 30px; border-radius: 20px; width: 90%; max-width: 400px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.9); animation: fadeIn 0.3s ease; text-align: center;
-        }
-        .modal-box h3 { color: var(--cream); margin-bottom: 20px; }
-        
-        .modal-input {
-            width: 100%; padding: 12px; margin-bottom: 15px; background-color: #0a0a0a;
-            border: 1px solid #222; border-radius: 10px; color: var(--cream); outline: none;
-            text-align: right; font-size: 1.1rem;
-        }
-        .modal-input:focus { border-color: var(--burgundy-light); }
-
-        /* --- اسکرول پیکر (مثل گوشی) --- */
-        .time-picker-container {
-            display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 20px;
-            position: relative; direction: ltr;
-        }
-        .picker-column {
-            height: 150px; width: 70px; overflow-y: scroll; scroll-snap-type: y mandatory;
-            scrollbar-width: none; 
-            background: #0a0a0a; border-radius: 10px; border: 1px solid #222;
-            position: relative;
-        }
-        .picker-column::-webkit-scrollbar { display: none; }
-        
-        .picker-item {
-            height: 50px; display: flex; justify-content: center; align-items: center;
-            scroll-snap-align: center; font-size: 1.5rem; color: var(--beige); transition: 0.2s;
-        }
-        
-        .picker-highlight {
-            position: absolute; top: 50px; left: 0; width: 100%; height: 50px;
-            background: rgba(92, 14, 27, 0.4); border-top: 1px solid var(--burgundy-light); border-bottom: 1px solid var(--burgundy-light);
-            pointer-events: none; z-index: 1;
-        }
-
-        /* --- انتخاب روزها --- */
-        .days-container { display: flex; justify-content: center; gap: 5px; margin-bottom: 20px; flex-wrap: wrap; }
-        .day-btn {
-            width: 40px; height: 40px; border-radius: 50%; border: 1px solid #333;
-            background: #111; color: var(--beige); cursor: pointer; font-weight: bold;
-            transition: 0.3s; display: flex; justify-content: center; align-items: center;
-        }
-        .day-btn.active { background: var(--burgundy-light); color: var(--cream); border-color: var(--cream); }
-
-        .modal-btns { display: flex; gap: 10px; margin-top: 10px; }
-        .btn-modal { flex: 1; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; border: none; transition: 0.3s; font-size: 1rem;}
-        .btn-yes { background-color: var(--burgundy-light); color: var(--cream); }
-        .btn-yes:hover { background-color: var(--burgundy-dark); }
-        .btn-no { background-color: #333; color: var(--cream); }
-        .btn-no:hover { background-color: #555; }
-
-        .ringing-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.95); z-index: 2000;
-            justify-content: center; align-items: center; flex-direction: column; gap: 20px;
-        }
-        .ringing-icon { font-size: 5rem; color: var(--burgundy-light); animation: shake 0.5s infinite; }
-        .ringing-title { font-size: 2rem; color: var(--cream); }
-        .stop-btn {
-            background: var(--burgundy-light); color: var(--cream); border: 2px solid var(--cream);
-            padding: 15px 40px; border-radius: 30px; font-size: 1.2rem; cursor: pointer;
-            font-weight: bold; transition: 0.3s;
-        }
-        .stop-btn:hover { background: var(--burgundy-dark); }
-
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-        @keyframes shake { 0% { transform: rotate(0deg); } 25% { transform: rotate(15deg); } 50% { transform: rotate(-15deg); } 75% { transform: rotate(15deg); } 100% { transform: rotate(0deg); } }
+        /* استایل برای لیست آلارم‌ها که بعدا اضافه میشن */
+        .alarm-list { margin-top: 30px; width: 100%; max-width: 400px; margin-left: auto; margin-right: auto; display: flex; flex-direction: column; gap: 15px; }
+        .alarm-item { background-color: var(--bg-card); border: 1px solid var(--burgundy-dark); padding: 15px 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .alarm-time { font-size: 1.5rem; font-weight: bold; color: var(--cream); }
+        .alarm-delete { background: transparent; color: var(--burgundy-light); border: none; font-size: 1.2rem; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -146,237 +79,23 @@
         <a href="support.html" class="nav-btn"><i class="fa-solid fa-headset"></i> Support</a>
     </nav>
 
-    <button class="add-alarm-btn" onclick="openAddAlarmModal()"><i class="fa-solid fa-plus"></i> Add New Alarm</button>
-    <div class="alarms-list" id="alarmsList"></div>
-</div>
-
-<!-- کادر افزودن آلارم -->
-<div class="modal-overlay" id="addAlarmModal">
-    <div class="modal-box">
-        <h3>Set New Alarm</h3>
+    <div class="alarm-card">
+        <h1 class="page-title">Alarms</h1>
         
-        <input type="text" id="alarmTitleInput" class="modal-input" placeholder="Alarm Title (e.g., Study Math)">
-        
-        <!-- اسکرول پیکر زمان -->
-        <div class="time-picker-container">
-            <div class="picker-highlight"></div>
-            <div class="picker-column" id="hourPicker"></div>
-            <span style="font-size: 2rem; font-weight: bold; z-index: 2;">:</span>
-            <div class="picker-column" id="minutePicker"></div>
-        </div>
+        <button class="add-alarm-btn">
+            <i class="fa-solid fa-plus"></i> Add New Alarm
+        </button>
 
-        <div class="days-container" id="daysContainer">
-            <div class="day-btn" data-day="0" onclick="toggleDay(this)">Su</div>
-            <div class="day-btn" data-day="1" onclick="toggleDay(this)">Mo</div>
-            <div class="day-btn" data-day="2" onclick="toggleDay(this)">Tu</div>
-            <div class="day-btn" data-day="3" onclick="toggleDay(this)">We</div>
-            <div class="day-btn" data-day="4" onclick="toggleDay(this)">Th</div>
-            <div class="day-btn" data-day="5" onclick="toggleDay(this)">Fr</div>
-            <div class="day-btn" data-day="6" onclick="toggleDay(this)">Sa</div>
-        </div>
-
-        <div class="modal-btns">
-            <button class="btn-modal btn-yes" onclick="saveAlarm()">Save Alarm</button>
-            <button class="btn-modal btn-no" onclick="closeModal('addAlarmModal')">Cancel</button>
+        <!-- لیست آلارم ها اینجا میان -->
+        <div class="alarm-list" id="alarmList">
+            <!-- این یه نمونه است -->
+            <div class="alarm-item">
+                <span class="alarm-time">07:00 AM</span>
+                <button class="alarm-delete"><i class="fa-solid fa-trash"></i></button>
+            </div>
         </div>
     </div>
 </div>
-
-<!-- کادر خطای جدید -->
-<div class="modal-overlay" id="errorModal">
-    <div class="modal-box">
-        <h3 style="color: var(--burgundy-light);">Oops!</h3>
-        <p id="errorText" style="color: var(--beige); margin-bottom: 20px;"></p>
-        <button class="btn-modal btn-no" style="width: 100%;" onclick="closeModal('errorModal')">OK</button>
-    </div>
-</div>
-
-<!-- کادر زنگ زدن -->
-<div class="ringing-modal" id="ringingModal">
-    <i class="fa-solid fa-bell ringing-icon"></i>
-    <h2 class="ringing-title" id="ringingTitle">Alarm!</h2>
-    <button class="stop-btn" onclick="stopAlarm()">STOP</button>
-</div>
-
-<script>
-    let alarms = JSON.parse(localStorage.getItem('friendAlarms')) || [];
-    let selectedDays = [];
-    let ringingInterval = null;
-    let currentHour = 0;
-    let currentMinute = 0;
-
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    
-    function playDing() {
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const oscillator = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
-        oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
-        gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-        gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.05);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
-        oscillator.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        oscillator.start();
-        oscillator.stop(audioCtx.currentTime + 1.5);
-    }
-
-    function setupPicker(containerId, maxVal) {
-        const container = document.getElementById(containerId);
-        container.innerHTML = '';
-        
-        const emptyTop = document.createElement('div');
-        emptyTop.style.height = '50px';
-        container.appendChild(emptyTop);
-
-        for (let i = 0; i < maxVal; i++) {
-            const item = document.createElement('div');
-            item.className = 'picker-item';
-            item.innerText = i.toString().padStart(2, '0');
-            item.dataset.value = i;
-            container.appendChild(item);
-        }
-
-        const emptyBottom = document.createElement('div');
-        emptyBottom.style.height = '50px';
-        container.appendChild(emptyBottom);
-
-        container.addEventListener('scroll', () => {
-            clearTimeout(container.settleTimeout);
-            container.settleTimeout = setTimeout(() => {
-                const index = Math.round(container.scrollTop / 50);
-                const items = container.querySelectorAll('.picker-item');
-                items.forEach((item, i) => {
-                    item.style.color = (i === index) ? 'var(--cream)' : 'var(--beige)';
-                    item.style.fontWeight = (i === index) ? 'bold' : 'normal';
-                });
-                
-                if (containerId === 'hourPicker') currentHour = index;
-                if (containerId === 'minutePicker') currentMinute = index;
-            }, 100); 
-        });
-    }
-
-    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-    function showError(msg) {
-        document.getElementById('errorText').innerText = msg;
-        openModal('errorModal');
-    }
-
-    function openAddAlarmModal() {
-        selectedDays = [];
-        document.querySelectorAll('.day-btn').forEach(btn => btn.classList.remove('active'));
-        document.getElementById('alarmTitleInput').value = '';
-        
-        setupPicker('hourPicker', 24);
-        setupPicker('minutePicker', 60);
-        
-        const now = new Date();
-        currentHour = now.getHours();
-        currentMinute = now.getMinutes();
-        
-        setTimeout(() => {
-            document.getElementById('hourPicker').scrollTop = currentHour * 50;
-            document.getElementById('minutePicker').scrollTop = currentMinute * 50;
-        }, 50);
-
-        openModal('addAlarmModal');
-    }
-
-    function toggleDay(el) {
-        const day = parseInt(el.getAttribute('data-day'));
-        if (selectedDays.includes(day)) {
-            selectedDays = selectedDays.filter(d => d !== day);
-            el.classList.remove('active');
-        } else {
-            selectedDays.push(day);
-            el.classList.add('active');
-        }
-    }
-
-    function saveAlarm() {
-        const title = document.getElementById('alarmTitleInput').value.trim();
-        if (!title) { showError("Please enter an alarm title!"); return; }
-        if (selectedDays.length === 0) { showError("Please select at least one day!"); return; }
-
-        const newAlarm = {
-            id: Date.now().toString(),
-            title: title,
-            hour: currentHour,
-            minute: currentMinute,
-            days: [...selectedDays],
-            isActive: true
-        };
-
-        alarms.push(newAlarm);
-        saveData();
-        renderAlarms();
-        closeModal('addAlarmModal');
-    }
-
-    function saveData() { localStorage.setItem('friendAlarms', JSON.stringify(alarms)); }
-
-    function renderAlarms() {
-        const list = document.getElementById('alarmsList');
-        list.innerHTML = '';
-        alarms.forEach(alarm => {
-            const hourStr = alarm.hour.toString().padStart(2, '0');
-            const minuteStr = alarm.minute.toString().padStart(2, '0');
-            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            const daysStr = alarm.days.map(d => dayNames[d]).join(', ');
-
-            const card = document.createElement('div');
-            card.className = 'alarm-card';
-            card.innerHTML = `
-                <div class="alarm-info">
-                    <div class="alarm-time-display">${hourStr}:${minuteStr}</div>
-                    <div class="alarm-title-display">${alarm.title}</div>
-                    <div class="alarm-days-display">${daysStr}</div>
-                </div>
-                <button class="delete-alarm-btn" onclick="deleteAlarm('${alarm.id}')"><i class="fa-solid fa-trash"></i></button>
-            `;
-            list.appendChild(card);
-        });
-    }
-
-    function deleteAlarm(id) {
-        alarms = alarms.filter(a => a.id !== id);
-        saveData();
-        renderAlarms();
-    }
-
-    setInterval(() => {
-        const now = new Date();
-        const currentH = now.getHours();
-        const currentM = now.getMinutes();
-        const currentDay = now.getDay();
-        const currentSecond = now.getSeconds();
-        if (currentSecond !== 0) return; 
-
-        alarms.forEach(alarm => {
-            if (alarm.isActive && alarm.hour === currentH && alarm.minute === currentM && alarm.days.includes(currentDay)) {
-                triggerAlarm(alarm);
-            }
-        });
-    }, 1000);
-
-    function triggerAlarm(alarm) {
-        document.getElementById('ringingTitle').innerText = alarm.title;
-        document.getElementById('ringingModal').style.display = 'flex';
-        playDing();
-        ringingInterval = setInterval(playDing, 2000);
-    }
-
-    function stopAlarm() {
-        clearInterval(ringingInterval);
-        document.getElementById('ringingModal').style.display = 'none';
-    }
-
-    renderAlarms();
-</script>
 
 </body>
 </html>
